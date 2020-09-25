@@ -251,7 +251,7 @@ public:
     CTestNetParams() {
         strNetworkID = CBaseChainParams::TESTNET;
         consensus.nSubsidyHalvingInterval = 210000;
-        consensus.BIP16Height = 232000;
+        consensus.BIP16Height = 10000000;
         /* As before, these are not the actual activation heights but some
            blocks after them.  */
         consensus.BIP34Height = 130000;
@@ -266,7 +266,7 @@ public:
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 10 * 60;
         consensus.fPowAllowMinDifficultyBlocks = true;
-        consensus.nMinDifficultySince = 1394838000; // 15 Mar 2014
+        consensus.nMinDifficultySince = 0; // 15 Mar 2014
         consensus.fPowNoRetargeting = false;
         consensus.nRuleChangeActivationThreshold = 1512; // 75% for testchains
         consensus.nMinerConfirmationWindow = 2016; // nPowTargetTimespan / nPowTargetSpacing
@@ -283,7 +283,7 @@ public:
         // By default assume that the signatures in ancestors of this block are valid.
         consensus.defaultAssumeValid = uint256S("0x0000cd7572b3ecc78b7cddf49eda95e718d4df77c236ca2e375125e111e7e9c4"); // 233,100
 
-        consensus.nAuxpowStartHeight = 0;
+        consensus.nAuxpowStartHeight = 1;
         consensus.nAuxpowChainId = 0x0003;
         consensus.fStrictChainId = false;
         consensus.nLegacyBlocksBefore = 1;
@@ -405,7 +405,6 @@ public:
         consensus.hashGenesisBlock = genesis.GetHash();
         assert(consensus.hashGenesisBlock == uint256S("0231881e96d6690eb00bb69cd8e221df3564e2cd95829d47d131ed5110a34e9d"));
         assert(genesis.hashMerkleRoot == uint256S("8de06f9a125793c3b6bfe7e3bc473ba2bb505b234af5d7e999bda03ed3f4ac34"));
-        
         vFixedSeeds.clear(); //!< Regtest mode doesn't have any fixed seeds.
         vSeeds.clear();      //!< Regtest mode doesn't have any DNS seeds.
 
