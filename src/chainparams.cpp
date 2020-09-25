@@ -190,7 +190,7 @@ public:
         printf("Block: %s\n", genesis.GetHash().GetHex().c_str());
         printf("hashMerkleRoot: %s\n", genesis.hashMerkleRoot.GetHex().c_str());
         assert(consensus.hashGenesisBlock == uint256S("000006fdd8b4d786fd9bdde5bae9486c464e3aa4336c5f8415dfdd3fc1679134"));
-        assert(genesis.hashMerkleRoot == uint256S("e621ab6805d649c51006defef49e1f1a9563ed6f82ab36409c47c95351a19016"));	        assert(genesis.hashMerkleRoot == uint256S("234651063df5f8b01ecc2fc3a134fa1cb9dc9da9cce0149049483ba1b1469dfb"));
+        assert(genesis.hashMerkleRoot == uint256S("234651063df5f8b01ecc2fc3a134fa1cb9dc9da9cce0149049483ba1b1469dfb "));	        assert(genesis.hashMerkleRoot == uint256S("234651063df5f8b01ecc2fc3a134fa1cb9dc9da9cce0149049483ba1b1469dfb"));
 
 
         /*	     
@@ -213,7 +213,7 @@ hashMerkleRoot: 2e32519b6d57327bfc9c7244068dc5405e6302c0a597324404427a3389ed5b9f
         base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x88, 0xB2, 0x1E};
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x88, 0xAD, 0xE4};
 
-        bech32_hrp = "nc";
+        bech32_hrp = "dc";
 
         vFixedSeeds = std::vector<SeedSpec6>(pnSeed6_main, pnSeed6_main + ARRAYLEN(pnSeed6_main));
 
@@ -255,6 +255,7 @@ public:
         /* As before, these are not the actual activation heights but some
            blocks after them.  */
         consensus.BIP34Height = 130000;
+        consensus.BIP34Hash = uint256S("0xe0a05455d89a54bb7c1b5bb785d6b1b7c5bda42ed4ce8dc19d68652ba8835954");
         consensus.BIP65Height = 130000;
         consensus.BIP66Height = 130000;
         /* Namecoin activates CSV/Segwit with BIP16.  */
@@ -277,15 +278,15 @@ public:
         // The value is the chain work of the Namecoin testnet chain at height
         // 233,000, with best block hash:
         // bc66fc22b8a2988bdc519c4c6aa431bb57201e5102ad8b8272fcde2937b4d2f7
-        consensus.nMinimumChainWork = uint256S("0x000000000000000000000000000000000000000000000000ed17e3004a583c4f");
+        consensus.nMinimumChainWork = uint256S("0x0000000000000000000000000000000000000000000000000000000000001c71");
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("0xbc66fc22b8a2988bdc519c4c6aa431bb57201e5102ad8b8272fcde2937b4d2f7"); // 233,100
+        consensus.defaultAssumeValid = uint256S("0x0000cd7572b3ecc78b7cddf49eda95e718d4df77c236ca2e375125e111e7e9c4"); // 233,100
 
         consensus.nAuxpowStartHeight = 0;
-        consensus.nAuxpowChainId = 0x0001;
+        consensus.nAuxpowChainId = 0x0003;
         consensus.fStrictChainId = false;
-        consensus.nLegacyBlocksBefore = -1;
+        consensus.nLegacyBlocksBefore = 1;
 
         consensus.rules.reset(new Consensus::TestNetConsensus());
 
@@ -300,49 +301,7 @@ public:
         m_assumed_chain_state_size = 1;
 
         genesis = CreateTestnetGenesisBlock(1522756358, 6658, 0x1f08ffff, 1, 50 * COIN);
-
-        consensus.hashGenesisBlock = uint256S("0x");
-
-                      // calculate Genesis Block
-                      // Reset genesis
-         /*             consensus.hashGenesisBlock = uint256S("0x");
-                      std::cout << std::string("Begin calculating Testnet Genesis Block:\n");
-                      if (true && (genesis.GetHash() != consensus.hashGenesisBlock)) {
-                          LogPrintf("Calculating Testnet Genesis Block:\n");
-                          arith_uint256 hashTarget = arith_uint256().SetCompact(genesis.nBits);
-                          uint256 hash;
-                          genesis.nNonce = 0;
-                          // This will figure out a valid hash and Nonce if you're
-                          // creating a different genesis block:
-                          // uint256 hashTarget = CBigNum().SetCompact(genesis.nBits).getuint256();
-                          // hashTarget.SetCompact(genesis.nBits, &fNegative, &fOverflow).getuint256();
-                          // while (genesis.GetHash() > hashTarget)
-                          while (UintToArith256(genesis.GetHash()) > hashTarget)
-                          {
-                              ++genesis.nNonce;
-                              if (genesis.nNonce == 0)
-                              {
-                                  LogPrintf("NONCE WRAPPED, incrementing time");
-                                  std::cout << std::string("NONCE WRAPPED, incrementing time:\n");
-                                  ++genesis.nTime;
-                              }
-                              if (genesis.nNonce % 10000 == 0)
-                              {
-                                  LogPrintf("Mainnet: nonce %08u: hash = %s \n", genesis.nNonce, genesis.GetHash().ToString().c_str());
-                                  // std::cout << strNetworkID << " nonce: " << genesis.nNonce << " time: " << genesis.nTime << " hash: " << genesis.GetHash().ToString().c_str() << "\n";
-                              }
-                          }
-                          std::cout << "Testnet ---\n";
-                          std::cout << "  nonce: " << genesis.nNonce <<  "\n";
-                          std::cout << "   time: " << genesis.nTime << "\n";
-                          std::cout << "   hash: " << genesis.GetHash().ToString().c_str() << "\n";
-                          std::cout << "   merklehash: "  << genesis.hashMerkleRoot.ToString().c_str() << "\n";
-                          // Mainnet --- nonce: 296277 time: 1390095618 hash: 000000bdd771b14e5a031806292305e563956ce2584278de414d9965f6ab54b0
-                      }
-                      std::cout << std::string("Finished calculating Testnet Genesis Block:\n");
-*/
-
-
+        consensus.hashGenesisBlock = genesis.GetHash();
         assert(consensus.hashGenesisBlock == uint256S("0000cd7572b3ecc78b7cddf49eda95e718d4df77c236ca2e375125e111e7e9c4"));
         assert(genesis.hashMerkleRoot == uint256S("8de06f9a125793c3b6bfe7e3bc473ba2bb505b234af5d7e999bda03ed3f4ac34"));
 
@@ -359,7 +318,7 @@ public:
         base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x35, 0x87, 0xCF};
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x35, 0x83, 0x94};
 
-        bech32_hrp = "tn";
+        bech32_hrp = "td";
 
         vFixedSeeds = std::vector<SeedSpec6>(pnSeed6_test, pnSeed6_test + ARRAYLEN(pnSeed6_test));
 
