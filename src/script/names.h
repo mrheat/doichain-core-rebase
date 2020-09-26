@@ -87,7 +87,8 @@ public:
   inline opcodetype
   getNameOp () const
   {
-    LogPrint (BCLog::NAMES, "getNameOp: %s\n", ValtypeToString (op).c_str ());
+    printf("getNameOp: %s\n", op);
+    //LogPrint (BCLog::N"getNameOp: %s\n", op);
     
     switch (op)
       {
