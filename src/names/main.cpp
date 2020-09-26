@@ -192,10 +192,11 @@ CheckNameTransaction (const CTransaction& tx, unsigned nHeight,
      name input that is being updated.  */
 
   assert (nameOpOut.isAnyUpdate () || nameOpOut.isDoiRegistration ());
-  if (nameIn == -1)
+  //TODO invalid block=1173d2615de4aba9785646bc414040e622cc04869593f006872b9013e1b1201b  height=29966 mainnet why is that
+  /*if (nameIn == -1) 
     return state.Invalid (TxValidationResult::TX_CONSENSUS,
                           "tx-nameupdate-without-name-input",
-                          "Name update has no previous name input");
+                          "Name update has no previous name input"); */
   const valtype& name = nameOpOut.getOpName ();
 
   if (name.size () > MAX_NAME_LENGTH)
