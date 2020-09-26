@@ -820,6 +820,9 @@ name_pending ()
             case OP_NAME_UPDATE:
               obj.pushKV ("op", "name_update");
               break;
+            case OP_NAME_DOI:
+              obj.pushKV ("op", "name_doi");
+              break;
             default:
               assert (false);
             }
@@ -921,7 +924,7 @@ PerformNameRawtx (const int nOut, const UniValue& nameOp,
 
       script = CNameScript::buildNameFirstupdate (script, name, value, rand);
     }
-  else if (op == "name_update")
+  else if (op == "name_update" || op == "name_doi")
     {
       RPCTypeCheckObj (nameOp,
         {
@@ -955,7 +958,7 @@ namerawtransaction ()
           {"vout", RPCArg::Type::NUM, RPCArg::Optional::NO, "The vout of the desired name output"},
           {"nameop", RPCArg::Type::OBJ, RPCArg::Optional::NO, "The name operation to create",
               {
-                  {"op", RPCArg::Type::STR, RPCArg::Optional::NO, "The operation to perform, can be \"name_new\", \"name_firstupdate\" and \"name_update\""},
+                  {"op", RPCArg::Type::STR, RPCArg::Optional::NO, "The operation to perform, can be \"name_new\", \"name_firstupdate\", \"name_update\" and \"name_doi\""},
                   {"name", RPCArg::Type::STR, RPCArg::Optional::NO, "The name to operate on"},
                   {"value", RPCArg::Type::STR, RPCArg::Optional::OMITTED, "The new value for the name"},
                   {"rand", RPCArg::Type::STR, RPCArg::Optional::OMITTED, "The nonce value to use for registrations"},
@@ -972,7 +975,7 @@ namerawtransaction ()
           HelpExampleCli ("namerawtransaction", R"("raw tx hex" 1 "{\"op\":\"name_new\",\"name\":\"my-name\")")
         + HelpExampleCli ("namerawtransaction", R"("raw tx hex" 1 "{\"op\":\"name_firstupdate\",\"name\":\"my-name\",\"value\":\"new value\",\"rand\":\"00112233\")")
         + HelpExampleCli ("namerawtransaction", R"("raw tx hex" 1 "{\"op\":\"name_update\",\"name\":\"my-name\",\"value\":\"new value\")")
-        + HelpExampleRpc ("namerawtransaction", R"("raw tx hex", 1, "{\"op\":\"name_update\",\"name\":\"my-name\",\"value\":\"new value\")")
+        + HelpExampleRpc ("namerawtransaction", R"("raw tx hex", 1, "{\"op\":\"name_doi\",\"name\":\"my-name\",\"value\":\"new value\")")
       },
       [&] (const RPCHelpMan& self, const JSONRPCRequest& request) -> UniValue
 {
