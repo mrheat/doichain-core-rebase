@@ -86,6 +86,8 @@ public:
   inline opcodetype
   getNameOp () const
   {
+    LogPrint (BCLog::NAMES, "getNameOp: %s\n", ValtypeToString (op).c_str ());
+    
     switch (op)
       {
       case OP_NAME_NEW:
