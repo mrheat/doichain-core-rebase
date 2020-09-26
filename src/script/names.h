@@ -6,7 +6,6 @@
 #define H_BITCOIN_SCRIPT_NAMES
 
 #include <script/script.h>
-#include <util.h>
 
 class uint160;
 
@@ -87,7 +86,7 @@ public:
   inline opcodetype
   getNameOp () const
   {
-    printf("getNameOp: %s\n", op);
+    printf("getNameOp: %u\n", op);
     //LogPrint (BCLog::N"getNameOp: %s\n", op);
     
     switch (op)
