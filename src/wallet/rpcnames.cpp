@@ -249,7 +249,7 @@ name_list ()
             }
         }
 
-      if (nOut == -1 || !nameOp.isAnyUpdate ())
+    if (nOut == -1 || (!nameOp.isAnyUpdate () && !nameOp.isDoiRegistration()))
         continue;
 
       const valtype& name = nameOp.getOpName ();
@@ -657,7 +657,112 @@ name_update ()
 }
   );
 }
+/* ************************************************************************** */
 
+RPCHelpMan
+name_doi ()
+{
+  NameOptionsHelp optHelp;
+  optHelp
+      .withNameEncoding ()
+      .withValueEncoding ()
+      .withWriteOptions ();
+
+  return RPCHelpMan ("name_doi",
+      "\Creates or updates a name_doi record and possibly transfers it."
+          + HELP_REQUIRING_PASSPHRASE,
+      {
+          {"name", RPCArg::Type::STR, RPCArg::Optional::NO, "The name_doi record to create or update"},
+          {"value", RPCArg::Type::STR, RPCArg::Optional::NO, "Value for the name"},
+          optHelp.buildRpcArg (),
+      },
+      RPCResult {RPCResult::Type::STR_HEX, "", "the transaction ID"},
+      RPCExamples {
+          HelpExampleCli ("name_doi", "\"myname\", \"new-value\"")
+        + HelpExampleRpc ("name_doi", "\"myname\", \"new-value\"")
+      },
+      [&] (const RPCHelpMan& self, const JSONRPCRequest& request) -> UniValue
+{
+  std::shared_ptr<CWallet> const wallet = GetWalletForJSONRPCRequest (request);
+  if (!wallet)
+    return NullUniValue;
+  CWallet* const pwallet = wallet.get ();
+
+  RPCTypeCheck (request.params,
+                {UniValue::VSTR, UniValue::VSTR, UniValue::VOBJ});
+
+  UniValue options(UniValue::VOBJ);
+  if (request.params.size () >= 3)
+    options = request.params[2].get_obj ();
+
+  const valtype name = DecodeNameFromRPCOrThrow (request.params[0], options);
+  if (name.size () > MAX_NAME_LENGTH)
+    throw JSONRPCError (RPC_INVALID_PARAMETER, "the name is too long");
+
+  const valtype value = DecodeValueFromRPCOrThrow (request.params[1], options);
+  if (value.size () > MAX_VALUE_LENGTH_UI)
+    throw JSONRPCError (RPC_INVALID_PARAMETER, "the value is too long");
+
+  /* For finding the name output to spend, we first check if there are
+     pending operations on the name in the mempool.  If there are, then we
+     build upon the last one to get a valid chain.  If there are none, then we
+     look up the last outpoint from the name database instead.  */
+
+  const unsigned chainLimit = gArgs.GetArg ("-limitnamechains",
+                                            DEFAULT_NAME_CHAIN_LIMIT);
+  COutPoint outp;
+  {
+    auto& mempool = EnsureMemPool (request.context);
+    LOCK (mempool.cs);
+
+    const unsigned pendingOps = mempool.pendingNameChainLength (name);
+    if (pendingOps >= chainLimit)
+      throw JSONRPCError (RPC_TRANSACTION_ERROR,
+                          "there are already too many pending operations"
+                          " on this name");
+
+    if (pendingOps > 0)
+      outp = mempool.lastNameOutput (name);
+  }
+
+  if (outp.IsNull ())
+    {
+      LOCK (cs_main);
+
+      CNameData oldData;
+      const auto& coinsTip = ::ChainstateActive ().CoinsTip ();
+      /*if (!coinsTip.GetName (name, oldData) || oldData.isExpired ())
+        throw JSONRPCError (RPC_TRANSACTION_ERROR,
+                            "this name can not be updated");*/
+
+      outp = oldData.getUpdateOutpoint ();
+    } 
+
+  assert (!outp.IsNull ());
+  const CTxIn txIn(outp);
+
+  /* Make sure the results are valid at least up to the most recent block
+     the user could have gotten from another RPC command prior to now.  */
+  pwallet->BlockUntilSyncedToCurrentChain ();
+
+  LOCK (pwallet->cs_wallet);
+
+  EnsureWalletIsUnlocked (pwallet);
+
+  DestinationAddressHelper destHelper(*pwallet);
+  destHelper.setOptions (options);
+
+  const CScript nameScript
+    = CNameScript::buildNameDOI (destHelper.getScript (), name, value);
+
+  const UniValue txidVal
+      = SendNameOutput (request, *pwallet, nameScript, &txIn, options);
+  destHelper.finalise ();
+
+  return txidVal;
+}
+  );
+}
 /* ************************************************************************** */
 
 RPCHelpMan

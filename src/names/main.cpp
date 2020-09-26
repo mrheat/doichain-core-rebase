@@ -191,7 +191,7 @@ CheckNameTransaction (const CTransaction& tx, unsigned nHeight,
   /* Now that we have ruled out NAME_NEW, check that we have a previous
      name input that is being updated.  */
 
-  assert (nameOpOut.isAnyUpdate ());
+  assert (nameOpOut.isAnyUpdate () || nameOpOut.isDoiRegistration ());
   if (nameIn == -1)
     return state.Invalid (TxValidationResult::TX_CONSENSUS,
                           "tx-nameupdate-without-name-input",
@@ -247,7 +247,7 @@ CheckNameTransaction (const CTransaction& tx, unsigned nHeight,
 
   /* Finally, NAME_FIRSTUPDATE.  */
 
-  assert (nameOpOut.getNameOp () == OP_NAME_FIRSTUPDATE);
+  //assert (nameOpOut.getNameOp () == OP_NAME_FIRSTUPDATE);
   if (nameOpIn.getNameOp () != OP_NAME_NEW)
     return state.Invalid (TxValidationResult::TX_CONSENSUS,
                           "tx-firstupdate-nonnew-input",

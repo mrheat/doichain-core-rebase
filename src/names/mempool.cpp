@@ -134,6 +134,13 @@ CNameMemPool::addUnchecked (const CTxMemPoolEntry& entry)
       else
         mit->second.insert (txHash);
     }
+  if (entry.isNameDoi ())
+    {
+      const valtype& name = entry.getName ();
+      assert (mapNameDois.count (name) == 0);
+      mapNameDois.insert (std::make_pair (name, txHash));
+
+    }
 }
 
 void
@@ -158,6 +165,13 @@ CNameMemPool::remove (const CTxMemPoolEntry& entry)
       txids.erase (itTxid);
       if (txids.empty ())
         updates.erase (itName);
+    }
+
+  if (entry.isNameDoi ())
+    {
+      const auto mit = mapNameDois.find (entry.getName ());
+      assert (mit != mapNameDois.end ());
+      mapNameDois.erase (mit);
     }
 }
 
@@ -250,6 +264,7 @@ CNameMemPool::check (ChainstateManager& chainman, const CCoinsView& coins) const
     nHeight = chainman.BlockIndex ().find (blockHash)->second->nHeight;
 
   std::set<valtype> nameRegs;
+  std::set<valtype> nameDois;
   std::map<valtype, unsigned> nameUpdates;
   for (const auto& entry : pool.mapTx)
     {
@@ -299,10 +314,31 @@ CNameMemPool::check (ChainstateManager& chainman, const CCoinsView& coins) const
           else
             assert (registersName (name));
         }
+      
+      if (entry.isNameDoi ())
+        {
+          const valtype& name = entry.getName ();
+
+          const auto mit = mapNameDois.find (name);
+         // const NameTxMap::const_iterator mit = mapNameDois.find (name);
+          assert (mit != mapNameDois.end ());
+          assert (mit->second == txHash);
+
+          assert (mapNameDois.count (name) == 0);
+          nameDois.insert (name);
+
+          /* As above, use nHeight+1 for the expiration check.  */
+          CNameData data;
+          if (!coins.GetName (name, data))
+            assert (false);
+          assert (!data.isExpired (nHeight + 1));
+        }
     }
 
   assert (nameRegs.size () == mapNameRegs.size ());
   assert (nameUpdates.size () == updates.size ());
+  assert (nameDois.size () == mapNameDois.size ());
+
   for (const auto& upd : nameUpdates)
     assert (updates.at (upd.first).size () == upd.second);
 }
@@ -347,6 +383,14 @@ CNameMemPool::checkTx (const CTransaction& tx) const
              properly and really a chain, as this is automatic due to the
              coloured-coin nature of names.  */
           break;
+
+        case OP_NAME_DOI:
+          { //see OP_NAME_UPDATE - this should apply for OP_NAME_DOI too! no problem with multiple updates
+            //const valtype& name = nameOp.getOpName ();
+            //if (registersDoi (name))
+            //   return false;
+            break;
+          }
 
         default:
           assert (false);

@@ -70,6 +70,16 @@ private:
    */
   std::map<valtype, uint256> mapNameNews;
 
+  /**
+   * Map NAME_DOI hashes to the corresponding transaction IDs. For each name,
+   * this may be a whole chain of updates.  This field is used to remove the
+   * transactions from the mempool should the name expire (and the updates
+   * thus become invalid).
+   *
+   * We also use this to determine the length of chains of pending name_update
+   * operations. 
+   */
+  std::map<valtype, uint256> mapNameDois;
 public:
 
   /**
@@ -103,6 +113,17 @@ public:
     return !mit->second.empty ();
   }
 
+   /**
+   * Check whether a particular DOI is being registered.  Does not lock.
+   * @param name The name to check for.
+   * @return True if there's a matching doi in the pool.
+   */
+    inline bool
+    registersDoi (const valtype& name) const
+    {
+      return mapNameDois.count (name) > 0;
+    }
+
   /**
    * Returns the number of pending operations on this name in the mempool.
    * In other words, this is the "length" of the chain of operations that
@@ -127,6 +148,7 @@ public:
     mapNameRegs.clear ();
     updates.clear ();
     mapNameNews.clear ();
+    mapNameDois.clear ();
   }
 
   /**

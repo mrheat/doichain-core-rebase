@@ -1709,8 +1709,12 @@ void CWalletTx::GetAmounts(std::list<COutputEntry>& listReceived,
         {
             if (nameOp.isAnyUpdate())
                 output.nameOp = "update: " + EncodeNameForMessage(nameOp.getOpName());
-            else
-                output.nameOp = "new: " + HexStr(nameOp.getOpHash());
+            else{
+            	  if (nameOp.isDoiRegistration())
+            	      output.nameOp = "doi: " + EncodeNameForMessage(nameOp.getOpName());
+            	  else
+            		  output.nameOp = "new: " + HexStr(nameOp.getOpHash());
+            }
             output.amount = 0;
         }
 

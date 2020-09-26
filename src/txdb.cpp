@@ -376,10 +376,10 @@ bool CCoinsViewDB::ValidateNameDB(ChainstateManager& chainman) const
             if (!coin.out.IsNull())
             {
                 const CNameScript nameOp(coin.out.scriptPubKey);
-                if (nameOp.isNameOp() && nameOp.isAnyUpdate())
+                if (nameOp.isNameOp() && (nameOp.isAnyUpdate() || nameOp.isDoiRegistration()))
                 {
                     const valtype& name = nameOp.getOpName();
-                    if (namesInUTXO.count(name) > 0)
+                    if (!nameOp.isDoiRegistration() && namesInUTXO.count(name) > 0)
                         return error("%s : name %s duplicated in UTXO set",
                                      __func__, EncodeNameForMessage(name));
                     namesInUTXO.insert(nameOp.getOpName());
