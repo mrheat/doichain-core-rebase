@@ -6,6 +6,7 @@
 #define H_BITCOIN_SCRIPT_NAMES
 
 #include <script/script.h>
+#include <util.h>
 
 class uint160;
 
