@@ -139,11 +139,11 @@ CheckNameTransaction (const CTransaction& tx, unsigned nHeight,
         }
     }
 
-  /* Check that no name inputs/outputs are present for a non-Namecoin tx.
-     If that's the case, all is fine.  For a Namecoin tx instead, there
+  /* Check that no name inputs/outputs are present for a non-Doichain tx.
+     If that's the case, all is fine.  For a Doichain tx instead, there
      should be at least an output (for NAME_NEW, no inputs are expected).  */
 
-  if (!tx.IsNamecoin ())
+  if (!tx.IsDoichain ())
     {
       if (nameIn != -1)
         return state.Invalid (TxValidationResult::TX_CONSENSUS,
@@ -157,7 +157,7 @@ CheckNameTransaction (const CTransaction& tx, unsigned nHeight,
       return true;
     }
 
-  assert (tx.IsNamecoin ());
+  assert (tx.IsDoichain ());
   if (nameOut == -1)
     return state.Invalid (TxValidationResult::TX_CONSENSUS,
                           "tx-name-without-name-output",
@@ -323,8 +323,8 @@ ApplyNameTransaction (const CTransaction& tx, unsigned nHeight,
 
   /* This check must be done *after* the historic bug fixing above!  Some
      of the names that must be handled above are actually produced by
-     transactions *not* marked as Namecoin tx.  */
-  if (!tx.IsNamecoin ())
+     transactions *not* marked as Doichain tx.  */
+  if (!tx.IsDoichain ())
     return;
 
   /* Changes are encoded in the outputs.  We don't have to do any checks,

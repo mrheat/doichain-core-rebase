@@ -67,7 +67,7 @@ static CBlock CreateGenesisBlock(uint32_t nTime, uint32_t nNonce, uint32_t nBits
 }
 
 /**
- * Build genesis block for testnet.  In Namecoin, it has a changed timestamp
+ * Build genesis block for testnet.  In Doichain, it has a changed timestamp
  * and output script (it uses Bitcoin's).
  */
 static CBlock CreateTestnetGenesisBlock(uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
@@ -94,7 +94,7 @@ public:
         consensus.BIP34Hash =  	uint256S("0x1414f096a62bee2501807a9a2a97c20557df1fdfb1284f9eaff88d60defe0750");
         consensus.BIP65Height = 130000;
         consensus.BIP66Height = 130000;
-        /* Namecoin activates CSV/Segwit with BIP16.  */
+        /* Doichain activates CSV/Segwit with BIP16.  */
         consensus.CSVHeight = 475000;
         consensus.SegwitHeight = 475000;
         consensus.MinBIP9WarningHeight = 477016; // segwit activation height + miner confirmation window
@@ -110,7 +110,7 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT; // December 31, 2008
 
         // The best chain should have at least this much work.
-        // The value is the chain work of the Namecoin mainnet chain at height
+        // The value is the chain work of the Doichain mainnet chain at height
         // 500'000, with best block hash:
         // 42c5147b7204a00ad0e56f167ed52e214da623a5459261db32d6da1687d601d6
         consensus.nMinimumChainWork = uint256S("0x00000000000000000000000000000000000000000000000ba50a60f8b56c7fe0");
@@ -258,7 +258,7 @@ public:
         consensus.BIP34Hash = uint256S("0xe0a05455d89a54bb7c1b5bb785d6b1b7c5bda42ed4ce8dc19d68652ba8835954");
         consensus.BIP65Height = 130000;
         consensus.BIP66Height = 130000;
-        /* Namecoin activates CSV/Segwit with BIP16.  */
+        /* Doichain activates CSV/Segwit with BIP16.  */
         consensus.CSVHeight = 232000;
         consensus.SegwitHeight = 232000;
         consensus.MinBIP9WarningHeight = 234016; // segwit activation height + miner confirmation window
@@ -275,7 +275,7 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1230767999; // December 31, 2008
 
         // The best chain should have at least this much work.
-        // The value is the chain work of the Namecoin testnet chain at height
+        // The value is the chain work of the Doichain testnet chain at height
         // 233,000, with best block hash:
         // bc66fc22b8a2988bdc519c4c6aa431bb57201e5102ad8b8272fcde2937b4d2f7
         consensus.nMinimumChainWork = uint256S("0x0000000000000000000000000000000000000000000000000000000000001c71");
@@ -308,7 +308,7 @@ public:
         vFixedSeeds.clear();
         vSeeds.clear();
         // nodes with support for servicebits filtering should be at the top
-        //vSeeds.emplace_back("dnsseed.test.namecoin.webbtc.com");
+        //vSeeds.emplace_back("dnsseed.test.doichain.webbtc.com");
         //vSeeds.emplace_back("ncts.roanapur.info");
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,111);

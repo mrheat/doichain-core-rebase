@@ -2009,7 +2009,7 @@ static UniValue encryptwallet(const JSONRPCRequest& request)
                 RPCExamples{
             "\nEncrypt your wallet\n"
             + HelpExampleCli("encryptwallet", "\"my pass phrase\"") +
-            "\nNow set the passphrase to use the wallet, such as for signing or sending namecoin\n"
+            "\nNow set the passphrase to use the wallet, such as for signing or sending doichain\n"
             + HelpExampleCli("walletpassphrase", "\"my pass phrase\"") +
             "\nNow we can do something like sign\n"
             + HelpExampleCli("signmessage", "\"address\" \"test message\"") +
@@ -2491,7 +2491,7 @@ static UniValue loadwallet(const JSONRPCRequest& request)
 {
             RPCHelpMan{"loadwallet",
                 "\nLoads a wallet from a wallet file or directory."
-                "\nNote that all wallet command-line options used when starting namecoind will be"
+                "\nNote that all wallet command-line options used when starting doichaind will be"
                 "\napplied to the new wallet (eg -rescan, etc).\n",
                 {
                     {"filename", RPCArg::Type::STR, RPCArg::Optional::NO, "The wallet directory or .dat file."},

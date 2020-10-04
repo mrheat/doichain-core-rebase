@@ -469,7 +469,7 @@ name_show ()
 
   if (::ChainstateActive ().IsInitialBlockDownload ())
     throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD,
-                       "Namecoin is downloading blocks...");
+                       "Doichain is downloading blocks...");
 
   UniValue options(UniValue::VOBJ);
   if (request.params.size () >= 2)
@@ -552,7 +552,7 @@ name_history ()
 
   if (::ChainstateActive ().IsInitialBlockDownload ())
     throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD,
-                       "Namecoin is downloading blocks...");
+                       "Doichain is downloading blocks...");
 
   UniValue options(UniValue::VOBJ);
   if (request.params.size () >= 2)
@@ -636,7 +636,7 @@ name_scan ()
 
   if (::ChainstateActive ().IsInitialBlockDownload ())
     throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD,
-                       "Namecoin is downloading blocks...");
+                       "Doichain is downloading blocks...");
 
   UniValue options(UniValue::VOBJ);
   if (request.params.size () >= 3)
@@ -795,7 +795,7 @@ name_pending ()
   for (const auto& txHash : txHashes)
     {
       std::shared_ptr<const CTransaction> tx = mempool.get (txHash);
-      if (!tx || !tx->IsNamecoin ())
+      if (!tx || !tx->IsDoichain ())
         continue;
 
       for (size_t n = 0; n < tx->vout.size (); ++n)
@@ -853,7 +853,7 @@ void
 PerformNameRawtx (const int nOut, const UniValue& nameOp,
                   CMutableTransaction& mtx, UniValue& result)
 {
-  mtx.SetNamecoin ();
+  mtx.SetDoichain ();
 
   if (nOut < 0 || nOut >= mtx.vout.size ())
     throw JSONRPCError (RPC_INVALID_PARAMETER, "vout is out of range");
@@ -868,7 +868,7 @@ PerformNameRawtx (const int nOut, const UniValue& nameOp,
 
   /* namerawtransaction does not have an options argument.  This would just
      make the already long list of arguments longer.  Instead of using
-     namerawtransaction, namecoin-tx can be used anyway to create name
+     namerawtransaction, doichain-tx can be used anyway to create name
      operations with arbitrary hex data.  */
   const UniValue NO_OPTIONS(UniValue::VOBJ);
 

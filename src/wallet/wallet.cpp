@@ -2825,7 +2825,7 @@ bool CWallet::CreateTransactionInternal(
     ReserveDestination reservedest(this, change_type);
     int nChangePosRequest = nChangePosInOut;
     unsigned int nSubtractFeeFromAmount = 0;
-    bool isNamecoin = false;
+    bool isDoichain = false;
     for (const auto& recipient : vecSend)
     {
         if (nValue < 0 || recipient.nAmount < 0)
@@ -2839,7 +2839,7 @@ bool CWallet::CreateTransactionInternal(
             nSubtractFeeFromAmount++;
 
         if (CNameScript::isNameScript (recipient.scriptPubKey))
-            isNamecoin = true;
+            isDoichain = true;
     }
     if (vecSend.empty())
     {
@@ -2859,8 +2859,8 @@ bool CWallet::CreateTransactionInternal(
     }
 
     CMutableTransaction txNew;
-    if (isNamecoin)
-        txNew.SetNamecoin();
+    if (isDoichain)
+        txNew.SetDoichain();
 
     FeeCalculation feeCalc;
     CAmount nFeeNeeded;

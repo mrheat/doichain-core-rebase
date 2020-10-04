@@ -228,7 +228,7 @@ name_list ()
   for (const auto& item : pwallet->mapWallet)
     {
       const CWalletTx& tx = item.second;
-      if (!tx.tx->IsNamecoin ())
+      if (!tx.tx->IsDoichain ())
         continue;
 
       CNameScript nameOp;
@@ -800,7 +800,7 @@ sendtoname ()
 
   if (::ChainstateActive ().IsInitialBlockDownload ())
     throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD,
-                       "Namecoin is downloading blocks...");
+                       "Doichain is downloading blocks...");
 
   /* Make sure the results are valid at least up to the most recent block
      the user could have gotten from another RPC command prior to now.  */
@@ -812,7 +812,7 @@ sendtoname ()
      configured name/value encodings).  That would just add to the already
      long list of rarely used arguments.  Also, this function is inofficially
      deprecated anyway, see
-     https://github.com/namecoin/namecoin-core/issues/12.  */
+     https://github.com/doichain/doichain-core/issues/12.  */
   const UniValue NO_OPTIONS(UniValue::VOBJ);
 
   const valtype name = DecodeNameFromRPCOrThrow (request.params[0], NO_OPTIONS);

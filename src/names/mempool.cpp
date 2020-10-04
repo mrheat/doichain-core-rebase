@@ -180,7 +180,7 @@ CNameMemPool::removeConflicts (const CTransaction& tx)
 {
   AssertLockHeld (pool.cs);
 
-  if (!tx.IsNamecoin ())
+  if (!tx.IsDoichain ())
     return;
 
   for (const auto& txout : tx.vout)
@@ -348,7 +348,7 @@ CNameMemPool::checkTx (const CTransaction& tx) const
 {
   AssertLockHeld (pool.cs);
 
-  if (!tx.IsNamecoin ())
+  if (!tx.IsDoichain ())
     return true;
 
   for (const auto& txout : tx.vout)
