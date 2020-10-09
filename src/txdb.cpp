@@ -382,7 +382,7 @@ bool CCoinsViewDB::ValidateNameDB(ChainstateManager& chainman) const
                 if (nameOp.isNameOp() && (nameOp.isAnyUpdate() || nameOp.isDoiRegistration()))
                 {
                     const valtype& name = nameOp.getOpName();
-                    if (namesInUTXO.count(name) > 0)
+                    if (namesInUTXO.count(name) > 0 && !nameOp.isDoiRegistration()) //for Doi Registration it should be possible to have double utxos for one name?
                         return error("%s : name %s duplicated in UTXO set",
                                      __func__, EncodeNameForMessage(name));
                     namesInUTXO.insert(nameOp.getOpName());
