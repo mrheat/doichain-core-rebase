@@ -136,11 +136,11 @@ public:
     switch (op)
       {
       case OP_NAME_NEW:
-      case OP_NAME_DOI: //TODO this doesn't seem safe here
         return false;
 
       case OP_NAME_FIRSTUPDATE:
       case OP_NAME_UPDATE:
+      case OP_NAME_DOI: 
         return true;
 
       default:
