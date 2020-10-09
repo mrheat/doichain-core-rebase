@@ -13,6 +13,7 @@
 // TODO remove the following dependencies
 #include <chain.h>
 #include <coins.h>
+#include <util/system.h>
 #include <util/moneystr.h>
 
 bool IsFinalTx(const CTransaction &tx, int nBlockHeight, int64_t nBlockTime)
