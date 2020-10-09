@@ -137,9 +137,17 @@ CNameMemPool::addUnchecked (const CTxMemPoolEntry& entry)
   if (entry.isNameDoi ())
     {
       const valtype& name = entry.getName ();
-      assert (mapNameDois.count (name) == 0);
-      mapNameDois.insert (std::make_pair (name, txHash));
-
+      if(mapNameDois.count(name) == 0)
+    	  mapNameDois.insert (std::make_pair (name, txHash));
+      else
+      {
+          const auto mit = mapNameDois.find (name);
+          if (mit == mapNameDois.end ())
+        	  mapNameDois.emplace (name, std::set<uint256> ({txHash}));
+          else
+        	  mit->second.insert (txHash);
+      }
+      //assert (mapNameDois.count (name) == 0);
     }
 }
 
@@ -327,6 +335,7 @@ CNameMemPool::check (ChainstateManager& chainman, const CCoinsView& coins) const
 
           //assert (mapNameDois.count (name) == 0);
           nameDois.insert (name);
+
 
           /* As above, use nHeight+1 for the expiration check.  */
           CNameData data;
