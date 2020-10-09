@@ -249,7 +249,7 @@ CheckNameTransaction (const CTransaction& tx, unsigned nHeight,
   LogPrintf ("CheckNameTransaction Step 5\n");
   if (nameOpOut.getNameOp () == OP_NAME_DOI)
     {
-
+	  LogPrintf ("this is a OP_NAME_DOI returning true!\n");
       return true;      
     }
   /* Finally, NAME_FIRSTUPDATE.  */
