@@ -159,7 +159,7 @@ int64_t GetTransactionSigOpCost(const CTransaction& tx, const CCoinsViewCache& i
 
 bool Consensus::CheckTxInputs(const CTransaction& tx, TxValidationState& state, const CCoinsViewCache& inputs, int nSpendHeight, unsigned flags, CAmount& txfee)
 {
-	printf ("CheckTxInputs\n");
+	LogPrintf ("CheckTxInputs Step 0\n");
     if (!CheckNameTransaction (tx, nSpendHeight, inputs, state, flags))
       {
         /* Add a generic "invalid for name op" error to the state if none
@@ -169,13 +169,14 @@ bool Consensus::CheckTxInputs(const CTransaction& tx, TxValidationState& state, 
                            "tx-invalid-nameop", "Tx invalid for Doichain");
         return false;
       }
-
+	LogPrintf ("CheckTxInputs Step 1\n");
     // are the actual inputs available?
     if (!inputs.HaveInputs(tx)) {
         return state.Invalid(TxValidationResult::TX_MISSING_INPUTS, "bad-txns-inputs-missingorspent",
                          strprintf("%s: inputs missing/spent", __func__));
     }
 
+	LogPrintf ("CheckTxInputs Step 1\n");
     CAmount nValueIn = 0;
     for (unsigned int i = 0; i < tx.vin.size(); ++i) {
         const COutPoint &prevout = tx.vin[i].prevout;
@@ -194,7 +195,7 @@ bool Consensus::CheckTxInputs(const CTransaction& tx, TxValidationState& state, 
             return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-txns-inputvalues-outofrange");
         }
     }
-
+	LogPrintf ("CheckTxInputs Step 2\n");
     const CAmount value_out = tx.GetValueOut();
     if (nValueIn < value_out) {
         return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-txns-in-belowout",
@@ -206,7 +207,7 @@ bool Consensus::CheckTxInputs(const CTransaction& tx, TxValidationState& state, 
     if (!MoneyRange(txfee_aux)) {
         return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-txns-fee-outofrange");
     }
-
+	LogPrintf ("CheckTxInputs Step 3\n");
     txfee = txfee_aux;
     return true;
 }
