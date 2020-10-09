@@ -123,7 +123,7 @@ CheckNameTransaction (const CTransaction& tx, unsigned nHeight,
           coinIn = coin;
         }
     }
-
+  LogPrintf ("CheckNameTransaction Step 1\n");
   int nameOut = -1;
   CNameScript nameOpOut;
   for (unsigned i = 0; i < tx.vout.size (); ++i)
@@ -157,7 +157,7 @@ CheckNameTransaction (const CTransaction& tx, unsigned nHeight,
 
       return true;
     }
-
+  LogPrintf ("CheckNameTransaction Step 2\n");
   assert (tx.IsDoichain ());
   if (nameOut == -1)
     return state.Invalid (TxValidationResult::TX_CONSENSUS,
@@ -191,7 +191,7 @@ CheckNameTransaction (const CTransaction& tx, unsigned nHeight,
 
   /* Now that we have ruled out NAME_NEW, check that we have a previous
      name input that is being updated.  */
-
+  LogPrintf ("CheckNameTransaction Step 3\n");
   assert (nameOpOut.isAnyUpdate () || nameOpOut.isDoiRegistration ());
   //TODO invalid block=1173d2615de4aba9785646bc414040e622cc04869593f006872b9013e1b1201b  height=29966 mainnet why is that
   /*if (nameIn == -1) 
@@ -210,7 +210,7 @@ CheckNameTransaction (const CTransaction& tx, unsigned nHeight,
                           "Invalid value");
 
   /* Process NAME_UPDATE next.  */
-
+  LogPrintf ("CheckNameTransaction Step 4\n");
   if (nameOpOut.getNameOp () == OP_NAME_UPDATE)
     {
       if (!nameOpIn.isAnyUpdate ())
@@ -246,6 +246,7 @@ CheckNameTransaction (const CTransaction& tx, unsigned nHeight,
 
       return true;
     }
+  LogPrintf ("CheckNameTransaction Step 5\n");
   if (nameOpOut.getNameOp () == OP_NAME_DOI)
     {
 
@@ -284,7 +285,7 @@ CheckNameTransaction (const CTransaction& tx, unsigned nHeight,
                             "tx-firstupdate-hash-mismatch",
                             "NAME_FIRSTUPDATE mismatch in hash / rand value");
   }
-
+  LogPrintf ("CheckNameTransaction Step 6\n");
   CNameData oldName;
   if (view.GetName (name, oldName) && !oldName.isExpired (nHeight))
     return state.Invalid (TxValidationResult::TX_CONSENSUS,
