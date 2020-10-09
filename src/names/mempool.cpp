@@ -317,6 +317,7 @@ CNameMemPool::check (ChainstateManager& chainman, const CCoinsView& coins) const
       
       if (entry.isNameDoi ())
         {
+	  LogPrint (BCLog::NAMES, "isNameDoi\n");
           const valtype& name = entry.getName ();
 
           const auto mit = mapNameDois.find (name);

@@ -159,6 +159,7 @@ int64_t GetTransactionSigOpCost(const CTransaction& tx, const CCoinsViewCache& i
 
 bool Consensus::CheckTxInputs(const CTransaction& tx, TxValidationState& state, const CCoinsViewCache& inputs, int nSpendHeight, unsigned flags, CAmount& txfee)
 {
+	printf ("CheckTxInputs\n");
     if (!CheckNameTransaction (tx, nSpendHeight, inputs, state, flags))
       {
         /* Add a generic "invalid for name op" error to the state if none

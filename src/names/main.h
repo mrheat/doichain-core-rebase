@@ -26,7 +26,7 @@ constexpr unsigned MIN_FIRSTUPDATE_DEPTH = 12;
 constexpr unsigned MAX_VALUE_LENGTH_UI = 520;
 
 /** The amount of coins to lock in created transactions.  */
-constexpr CAmount NAME_LOCKED_AMOUNT = COIN / 50;
+constexpr CAmount NAME_LOCKED_AMOUNT = COIN / 100;
 
 /* ************************************************************************** */
 /* CNameTxUndo.  */

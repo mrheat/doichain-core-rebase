@@ -924,7 +924,7 @@ PerformNameRawtx (const int nOut, const UniValue& nameOp,
 
       script = CNameScript::buildNameFirstupdate (script, name, value, rand);
     }
-  else if (op == "name_update" || op == "name_doi")
+  else if (op == "name_update")
     {
       RPCTypeCheckObj (nameOp,
         {
@@ -940,6 +940,23 @@ PerformNameRawtx (const int nOut, const UniValue& nameOp,
                                        NO_OPTIONS);
 
       script = CNameScript::buildNameUpdate (script, name, value);
+    }
+    else if (op == "name_doi")
+    {
+      RPCTypeCheckObj (nameOp,
+        {
+          {"name", UniValueType (UniValue::VSTR)},
+          {"value", UniValueType (UniValue::VSTR)},
+        }
+      );
+
+      const valtype name
+          = DecodeNameFromRPCOrThrow (find_value (nameOp, "name"), NO_OPTIONS);
+      const valtype value
+          = DecodeValueFromRPCOrThrow (find_value (nameOp, "value"),
+                                       NO_OPTIONS);
+
+      script = CNameScript::buildNameDOI (script, name, value);
     }
   else
     throw JSONRPCError (RPC_INVALID_PARAMETER, "Invalid name operation");

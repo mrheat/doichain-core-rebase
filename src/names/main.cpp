@@ -87,6 +87,7 @@ CheckNameTransaction (const CTransaction& tx, unsigned nHeight,
                       const CCoinsView& view,
                       TxValidationState& state, unsigned flags)
 {
+	LogPrintf ("CheckNameTransaction Step 0\n");
   const bool fMempool = (flags & SCRIPT_VERIFY_NAMES_MEMPOOL);
 
   /* Ignore historic bugs.  */

@@ -684,6 +684,7 @@ name_doi ()
       [&] (const RPCHelpMan& self, const JSONRPCRequest& request) -> UniValue
 {
   std::shared_ptr<CWallet> const wallet = GetWalletForJSONRPCRequest (request);
+
   if (!wallet)
     return NullUniValue;
   CWallet* const pwallet = wallet.get ();
@@ -725,6 +726,7 @@ name_doi ()
       outp = mempool.lastNameOutput (name);
   }
 
+  CTxIn txIn;
   if (outp.IsNull ())
     {
       LOCK (cs_main);
@@ -738,8 +740,15 @@ name_doi ()
       outp = oldData.getUpdateOutpoint ();
     } 
 
-  assert (!outp.IsNull ());
-  const CTxIn txIn(outp);
+  if(!outp.IsNull ())
+    {
+      //xCTxIn txIn(outp)
+      //txIn(outp);
+    }
+
+  LogPrintf ("if output is not null please use as input here! \n");
+  //assert (!outp.IsNull ());
+
 
   /* Make sure the results are valid at least up to the most recent block
      the user could have gotten from another RPC command prior to now.  */
@@ -756,7 +765,8 @@ name_doi ()
     = CNameScript::buildNameDOI (destHelper.getScript (), name, value);
 
   const UniValue txidVal
-      = SendNameOutput (request, *pwallet, nameScript, &txIn, options);
+      //= SendNameOutput (request, *pwallet, nameScript, &txIn, options);
+      = SendNameOutput (request, *pwallet, nameScript, nullptr, options);
   destHelper.finalise ();
 
   return txidVal;

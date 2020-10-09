@@ -335,6 +335,8 @@ bool CBlockTreeDB::WriteBatchSync(const std::vector<std::pair<int, const CBlockF
 
 bool CCoinsViewDB::ValidateNameDB(ChainstateManager& chainman) const
 {
+    LogPrintf("ValidateNameDB.\n");
+
     const uint256 blockHash = GetBestBlock();
     int nHeight;
     if (blockHash.IsNull())
@@ -369,6 +371,7 @@ bool CCoinsViewDB::ValidateNameDB(ChainstateManager& chainman) const
         {
         case DB_COIN:
         {
+    	    LogPrintf("Checkng DB_COIN.\n");
             Coin coin;
             if (!pcursor->GetValue(coin))
                 return error("%s : failed to read coin", __func__);
@@ -379,7 +382,7 @@ bool CCoinsViewDB::ValidateNameDB(ChainstateManager& chainman) const
                 if (nameOp.isNameOp() && (nameOp.isAnyUpdate() || nameOp.isDoiRegistration()))
                 {
                     const valtype& name = nameOp.getOpName();
-                    if (!nameOp.isDoiRegistration() && namesInUTXO.count(name) > 0)
+                    if (namesInUTXO.count(name) > 0)
                         return error("%s : name %s duplicated in UTXO set",
                                      __func__, EncodeNameForMessage(name));
                     namesInUTXO.insert(nameOp.getOpName());
@@ -390,6 +393,7 @@ bool CCoinsViewDB::ValidateNameDB(ChainstateManager& chainman) const
 
         case DB_NAME:
         {
+    	    LogPrintf("Checkng DB_NAME.\n");
             std::pair<char, valtype> key;
             if (!pcursor->GetKey(key) || key.first != DB_NAME)
                 return error("%s : failed to read DB_NAME key", __func__);
@@ -407,7 +411,7 @@ bool CCoinsViewDB::ValidateNameDB(ChainstateManager& chainman) const
             /* Expiration is checked at height+1, because that matches
                how the UTXO set is cleared in ExpireNames.  */
             assert(namesInDB.count(name) == 0);
-            if (!data.isExpired(nHeight + 1))
+            //if (!data.isExpired(nHeight + 1)) //TODO what is that exactly for? 
                 namesInDB.insert(name);
             break;
         }
