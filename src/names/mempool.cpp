@@ -325,7 +325,7 @@ CNameMemPool::check (ChainstateManager& chainman, const CCoinsView& coins) const
           assert (mit != mapNameDois.end ());
           assert (mit->second == txHash);
 
-          assert (mapNameDois.count (name) == 0);
+          //assert (mapNameDois.count (name) == 0);
           nameDois.insert (name);
 
           /* As above, use nHeight+1 for the expiration check.  */
