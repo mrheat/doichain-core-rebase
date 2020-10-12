@@ -28,7 +28,7 @@ class CTxMemPoolEntry;
  * the network has upgraded sufficiently, we should increase this to a value
  * higher but still lower than the general mempool ancestor limit.
  */
-static constexpr unsigned DEFAULT_NAME_CHAIN_LIMIT = 1;
+static constexpr unsigned DEFAULT_NAME_CHAIN_LIMIT = 2;
 
 /**
  * Handle the name component of the transaction mempool.  This keeps track
@@ -122,7 +122,10 @@ public:
     inline bool
     registersDoi (const valtype& name) const
     {
-      return mapNameDois.count (name) > 0;
+      const auto mit = mapNameDois.find (name);
+      if (mit == mapNameDois.end ())
+        return false;
+      return !mit->second.empty ();
     }
 
   /**

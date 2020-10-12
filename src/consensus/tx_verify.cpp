@@ -177,7 +177,7 @@ bool Consensus::CheckTxInputs(const CTransaction& tx, TxValidationState& state, 
                          strprintf("%s: inputs missing/spent", __func__));
     }
 
-	LogPrintf ("CheckTxInputs Step 1\n");
+	LogPrintf ("CheckTxInputs Step 2\n");
     CAmount nValueIn = 0;
     for (unsigned int i = 0; i < tx.vin.size(); ++i) {
         const COutPoint &prevout = tx.vin[i].prevout;
@@ -196,7 +196,7 @@ bool Consensus::CheckTxInputs(const CTransaction& tx, TxValidationState& state, 
             return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-txns-inputvalues-outofrange");
         }
     }
-	LogPrintf ("CheckTxInputs Step 2\n");
+	LogPrintf ("CheckTxInputs Step 3\n");
     const CAmount value_out = tx.GetValueOut();
     if (nValueIn < value_out) {
         return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-txns-in-belowout",
@@ -208,7 +208,7 @@ bool Consensus::CheckTxInputs(const CTransaction& tx, TxValidationState& state, 
     if (!MoneyRange(txfee_aux)) {
         return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-txns-fee-outofrange");
     }
-	LogPrintf ("CheckTxInputs Step 3\n");
+	LogPrintf ("CheckTxInputs Step 4\n");
     txfee = txfee_aux;
     return true;
 }

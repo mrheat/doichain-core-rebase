@@ -740,11 +740,6 @@ name_doi ()
       outp = oldData.getUpdateOutpoint ();
     } 
 
-  if(!outp.IsNull ())
-    {
-      //xCTxIn txIn(outp)
-      //txIn(outp);
-    }
 
   LogPrintf ("if output is not null please use as input here! \n");
   //assert (!outp.IsNull ());
