@@ -268,7 +268,6 @@ CNameMemPool::check (ChainstateManager& chainman, const CCoinsView& coins) const
 
   LogPrint (BCLog::NAMES, "check\n");
 
-  const auto mit
   const uint256 blockHash = coins.GetBestBlock ();
   int nHeight;
   if (blockHash.IsNull())
