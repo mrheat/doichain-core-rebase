@@ -4,11 +4,20 @@
 
 - mempool.h 
 	- definition of map<valtype, std::set<uint256>> mapNameDoi
+	- registersDoi
+	- clear
+	
 - mempool.cpp (is called when a transaction hits the mempool) 
 	- check 
 	- addUnchecked (105)
 	- remove (155) - removes a mempoolentry from mapNameDois
-	
+	- checkTx
+
+
+WORKFLOW
+- new name tx
+	- consensus/tx_verify.cpp - CheckTxInputs -> CheckNameTransaction
+	- 
 	
 	
 TODO:

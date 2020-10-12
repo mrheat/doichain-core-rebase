@@ -759,12 +759,23 @@ name_doi ()
   const CScript nameScript
     = CNameScript::buildNameDOI (destHelper.getScript (), name, value);
 
-  const UniValue txidVal
-      //= SendNameOutput (request, *pwallet, nameScript, &txIn, options);
-      = SendNameOutput (request, *pwallet, nameScript, nullptr, options);
-  destHelper.finalise ();
+  if(!outp.IsNull ())
+    {
+      txIn(outp);
+	  const UniValue txidVal
+	      = SendNameOutput (request, *pwallet, nameScript, &txIn, options);
+	  destHelper.finalise ();
 
-  return txidVal;
+	  return txidVal;
+    }
+  else
+    {
+	  const UniValue txidVal
+	      = SendNameOutput (request, *pwallet, nameScript, nullptr, options);
+	  destHelper.finalise ();
+
+	  return txidVal;
+    }
 }
   );
 }
