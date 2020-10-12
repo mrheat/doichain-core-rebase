@@ -411,8 +411,8 @@ bool CCoinsViewDB::ValidateNameDB(ChainstateManager& chainman) const
             /* Expiration is checked at height+1, because that matches
                how the UTXO set is cleared in ExpireNames.  */
             assert(namesInDB.count(name) == 0);
-            //if (!data.isExpired(nHeight + 1)) //TODO what is that exactly for? 
-                namesInDB.insert(name);
+            if (!data.isExpired(nHeight + 1)) //TODO what is that exactly for?
+            	namesInDB.insert(name);
             break;
         }
 
