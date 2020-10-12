@@ -79,7 +79,7 @@ private:
    * We also use this to determine the length of chains of pending name_update
    * operations. 
    */
-  std::map<valtype, uint256> mapNameDois;
+  std::map<valtype, std::set<uint256>> mapNameDois;
 public:
 
   /**

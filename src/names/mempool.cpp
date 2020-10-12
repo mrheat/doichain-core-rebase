@@ -138,14 +138,15 @@ CNameMemPool::addUnchecked (const CTxMemPoolEntry& entry)
     {
       const valtype& name = entry.getName ();
       if(mapNameDois.count(name) == 0)
-    	  mapNameDois.insert (std::make_pair (name, txHash));
+        	  mapNameDois.emplace (name, std::set<uint256> ({txHash}));
+    	  //mapNameDois.insert (std::make_pair (name, txHash));
       else
       {
           const auto mit = mapNameDois.find (name);
           if (mit == mapNameDois.end ())
         	  mapNameDois.emplace (name, std::set<uint256> ({txHash}));
-          else
-        	  mit->second.insert (txHash);
+          //else
+        	 // mit->second.insert (txHash);
       }
       //assert (mapNameDois.count (name) == 0);
     }
@@ -331,7 +332,7 @@ CNameMemPool::check (ChainstateManager& chainman, const CCoinsView& coins) const
           const auto mit = mapNameDois.find (name);
          // const NameTxMap::const_iterator mit = mapNameDois.find (name);
           assert (mit != mapNameDois.end ());
-          assert (mit->second == txHash);
+          //assert (mit->second == txHash);
 
           //assert (mapNameDois.count (name) == 0);
           nameDois.insert (name);
