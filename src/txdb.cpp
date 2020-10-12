@@ -393,12 +393,12 @@ bool CCoinsViewDB::ValidateNameDB(ChainstateManager& chainman) const
 
         case DB_NAME:
         {
-    	    LogPrintf("Checkng DB_NAME.\n");
+
             std::pair<char, valtype> key;
             if (!pcursor->GetKey(key) || key.first != DB_NAME)
                 return error("%s : failed to read DB_NAME key", __func__);
             const valtype& name = key.second;
-
+            LogPrintf("Checkng DB_NAME: %s\n",name);
             CNameData data;
             if (!pcursor->GetValue(data))
                 return error("%s : failed to read name value", __func__);
@@ -411,7 +411,7 @@ bool CCoinsViewDB::ValidateNameDB(ChainstateManager& chainman) const
             /* Expiration is checked at height+1, because that matches
                how the UTXO set is cleared in ExpireNames.  */
             assert(namesInDB.count(name) == 0);
-            if (!data.isExpired(nHeight + 1)) //TODO what is that exactly for?
+            if (!data.isExpired(nHeight + 1))
             	namesInDB.insert(name);
             break;
         }
