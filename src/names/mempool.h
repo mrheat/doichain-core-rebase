@@ -71,15 +71,15 @@ private:
   std::map<valtype, uint256> mapNameNews;
 
   /**
-   * Map NAME_DOI hashes to the corresponding transaction IDs. For each name,
+   * Keep track of all transactions that register or update a given Doi name.  For each name,
    * this may be a whole chain of updates.  This field is used to remove the
    * transactions from the mempool should the name expire (and the updates
    * thus become invalid).
    *
    * We also use this to determine the length of chains of pending name_update
-   * operations. 
+   * operations.
    */
-  std::map<valtype, uint256> mapNameDois;
+   std::map<valtype, std::set<uint256>> mapNameDois;
 public:
 
   /**

@@ -136,7 +136,7 @@ CNameMemPool::addUnchecked (const CTxMemPoolEntry& entry)
     }
   if (entry.isNameDoi ())
     {
-      const valtype& name = entry.getName ();
+     /* const valtype& name = entry.getName ();
       if(mapNameDois.count(name) == 0)
     	  mapNameDois.insert (std::make_pair (name, txHash));
       else
@@ -146,7 +146,15 @@ CNameMemPool::addUnchecked (const CTxMemPoolEntry& entry)
         	  mapNameDois.emplace (name, std::set<uint256> ({txHash}));
           else
         	  mit->second.insert (txHash);
-      }
+      } */
+      const valtype& name = entry.getName ();
+	  const auto mit = mapNameDois.find (name);
+
+	  if (mit == mapNameDois.end ())
+		  mapNameDois.emplace (name, std::set<uint256> ({txHash}));
+	  else
+		mit->second.insert (txHash);
+
       //assert (mapNameDois.count (name) == 0);
     }
 }
@@ -177,9 +185,14 @@ CNameMemPool::remove (const CTxMemPoolEntry& entry)
 
   if (entry.isNameDoi ())
     {
-      const auto mit = mapNameDois.find (entry.getName ());
-      assert (mit != mapNameDois.end ());
-      mapNameDois.erase (mit);
+      const auto itName = mapNameDois.find (entry.getName ());
+      assert (itName != mapNameDois.end ());
+      auto& txids = itName->second;
+      const auto itTxid = txids.find (entry.GetTx ().GetHash ());
+      assert (itTxid != txids.end ());
+      txids.erase (itTxid);
+      if (txids.empty ())
+    	  mapNameDois.erase (itName);
     }
 }
 
@@ -272,7 +285,7 @@ CNameMemPool::check (ChainstateManager& chainman, const CCoinsView& coins) const
     nHeight = chainman.BlockIndex ().find (blockHash)->second->nHeight;
 
   std::set<valtype> nameRegs;
-  std::set<valtype> nameDois;
+  std::map<valtype, unsigned> nameDois;
   std::map<valtype, unsigned> nameUpdates;
   for (const auto& entry : pool.mapTx)
     {
@@ -325,23 +338,20 @@ CNameMemPool::check (ChainstateManager& chainman, const CCoinsView& coins) const
       
       if (entry.isNameDoi ())
         {
-	  LogPrint (BCLog::NAMES, "isNameDoi\n");
+    	  LogPrint (BCLog::NAMES, "isNameDoi\n");
           const valtype& name = entry.getName ();
 
           const auto mit = mapNameDois.find (name);
-         // const NameTxMap::const_iterator mit = mapNameDois.find (name);
           assert (mit != mapNameDois.end ());
-          assert (mit->second == txHash);
+          assert (mit->second.count (txHash) > 0);
 
-          //assert (mapNameDois.count (name) == 0);
-          nameDois.insert (name);
+          ++nameDois[name];
 
-
-          /* As above, use nHeight+1 for the expiration check.  */
           CNameData data;
-          if (!coins.GetName (name, data))
-            assert (false);
-          assert (!data.isExpired (nHeight + 1));
+          if (coins.GetName (name, data))
+            assert (!data.isExpired (nHeight + 1));
+          else
+            assert (registersDoi (name));
         }
     }
 
