@@ -398,10 +398,11 @@ CNameMemPool::checkTx (const CTransaction& tx) const
         case OP_NAME_DOI:
           { //see OP_NAME_UPDATE - this should apply for OP_NAME_DOI too! no problem with multiple updates
             const valtype& name = nameOp.getOpName ();
-            std::string s(name.begin(), name.end()); //check if a name_doi starts with d/ (we want to keep namecoin functionality as it is but don't want to use name_doi for the d/  workflow
-            if (s.rfind("d/", 0) == 0) {
+            //check if a name_doi starts with d/
+            //(we want to keep namecoin functionality as it is but don't want to use name_doi for the d/  workflow
+            if (EncodeNameForMessage(name).rfind("d/", 0) == 0)
             	return false;
-            }
+
 
 			break;
 		}
