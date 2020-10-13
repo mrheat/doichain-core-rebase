@@ -398,7 +398,7 @@ bool CCoinsViewDB::ValidateNameDB(ChainstateManager& chainman) const
             if (!pcursor->GetKey(key) || key.first != DB_NAME)
                 return error("%s : failed to read DB_NAME key", __func__);
             const valtype& name = key.second;
-            LogPrintf("Checkng DB_NAME: %s\n",name);
+            LogPrintf("Checkng DB_NAME: %s\n",EncodeNameForMessage(name));
             CNameData data;
             if (!pcursor->GetValue(data))
                 return error("%s : failed to read name value", __func__);
