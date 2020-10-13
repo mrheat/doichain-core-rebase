@@ -11,7 +11,16 @@
 	- check 
 	- addUnchecked (105)
 	- remove (155) - removes a mempoolentry from mapNameDois
-	- checkTx
+	- checkTx - don't except d/ names in name_doi transactions
+	
+- rpcname.cpp  
+	- name_doi 
+
+- tx_verify.cpp
+- txdb.cpp
+	- ValidateNameDB 
+- names/main.cpp
+	- CheckNameTransaction 
 
 
 WORKFLOW
