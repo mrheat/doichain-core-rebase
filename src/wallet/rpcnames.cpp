@@ -726,7 +726,6 @@ name_doi ()
       outp = mempool.lastNameOutput (name);
   }
 
-  CTxIn txIn;
   if (outp.IsNull ())
     {
       LOCK (cs_main);
@@ -740,10 +739,7 @@ name_doi ()
       outp = oldData.getUpdateOutpoint ();
     } 
 
-
-  LogPrintf ("if output is not null please use as input here! \n");
   //assert (!outp.IsNull ());
-
 
   /* Make sure the results are valid at least up to the most recent block
      the user could have gotten from another RPC command prior to now.  */
@@ -761,7 +757,8 @@ name_doi ()
 
   if(!outp.IsNull ())
     {
-      txIn(outp);
+	  LogPrintf ("output is not null using old data as input here! \n");
+	  CTxIn txIn (outp);
 	  const UniValue txidVal
 	      = SendNameOutput (request, *pwallet, nameScript, &txIn, options);
 	  destHelper.finalise ();
@@ -770,6 +767,7 @@ name_doi ()
     }
   else
     {
+	  LogPrintf ("output is null\n");
 	  const UniValue txidVal
 	      = SendNameOutput (request, *pwallet, nameScript, nullptr, options);
 	  destHelper.finalise ();
