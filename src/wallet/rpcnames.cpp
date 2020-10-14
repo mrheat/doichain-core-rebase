@@ -744,6 +744,7 @@ name_doi ()
       outp = oldData.getUpdateOutpoint ();
     } 
 
+  CTxIn txIn (outp);
   //assert (!outp.IsNull ());
 
   /* Make sure the results are valid at least up to the most recent block
@@ -763,7 +764,6 @@ name_doi ()
   if(!outp.IsNull ())
     {
 	  LogPrintf ("output is not null using old data as input here! \n");
-	  CTxIn txIn (outp);
 	  const UniValue txidVal
 	      = SendNameOutput (request, *pwallet, nameScript, &txIn, options);
 	  destHelper.finalise ();
