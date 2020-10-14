@@ -1627,9 +1627,11 @@ int64_t CalculateMaximumSignedTxSize(const CTransaction &tx, const CWallet *wall
 {
     std::vector<CTxOut> txouts;
     for (const CTxIn& input : tx.vin) {
+    	WalletLogPrintf("CalculateMaximumSignedTxSize:input found!");
         const auto mi = wallet->mapWallet.find(input.prevout.hash);
         // Can not estimate size without knowing the input details
         if (mi == wallet->mapWallet.end()) {
+        	WalletLogPrintf("CalculateMaximumSignedTxSize:mapWallet without data");
             return -1;
         }
         assert(input.prevout.n < mi->second.tx->vout.size());

@@ -126,7 +126,7 @@ void DestinationAddressHelper::finalise ()
 
 /**
  * Sends a name output to the given name script.  This is the "final" step that
- * is common between name_new, name_firstupdate and name_update.  This method
+ * is common between name_new, name_firstupdate, name_update and name_doi.  This method
  * also implements the "sendCoins" option, if included.
  */
 UniValue
