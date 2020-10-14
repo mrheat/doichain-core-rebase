@@ -669,7 +669,7 @@ name_doi ()
       .withWriteOptions ();
 
   return RPCHelpMan ("name_doi",
-      "\Creates or updates a name_doi record and possibly transfers it."
+      "\nCreates or updates a name_doi record and possibly transfers it."
           + HELP_REQUIRING_PASSPHRASE,
       {
           {"name", RPCArg::Type::STR, RPCArg::Optional::NO, "The name_doi record to create or update"},

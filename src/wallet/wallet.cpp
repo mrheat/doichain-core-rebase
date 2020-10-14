@@ -1544,11 +1544,13 @@ bool CWallet::DummySignInput(CTxIn &tx_in, const CTxOut &txout, bool use_max_sig
     std::unique_ptr<SigningProvider> provider = GetSolvingProvider(scriptPubKey);
     if (!provider) {
         // We don't know about this scriptpbuKey;
+    	LogPrintf("DummySignInput We don't know about this scriptpbuKey;!\n");
         return false;
     }
 
     if (!ProduceSignature(*provider, use_max_sig ? DUMMY_MAXIMUM_SIGNATURE_CREATOR : DUMMY_SIGNATURE_CREATOR, scriptPubKey, sigdata)) {
-        return false;
+    	LogPrintf("DummySignInput could not produce signature ProduceSignature!\n");
+    	return false;
     }
     UpdateInput(tx_in, sigdata);
     return true;
@@ -1562,6 +1564,7 @@ bool CWallet::DummySignTx(CMutableTransaction &txNew, const std::vector<CTxOut> 
     for (const auto& txout : txouts)
     {
         if (!DummySignInput(txNew.vin[nIn], txout, use_max_sig)) {
+        	LogPrintf("DummySignInput not existing returning false!\n");
             return false;
         }
 
