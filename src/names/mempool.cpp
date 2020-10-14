@@ -21,9 +21,16 @@ CNameMemPool::pendingChainLength (const valtype& name) const
   if (registersName (name))
     ++res;
 
+  if (registersDoi (name))
+    ++res;
+
   const auto mit = updates.find (name);
   if (mit != updates.end ())
     res += mit->second.size ();
+
+  const auto mitDoi = mapNameDois.find (name);
+  if (mitDoi != mapNameDois.end ())
+    res += mitDoi->second.size ();
 
   return res;
 }
