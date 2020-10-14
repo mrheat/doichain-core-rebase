@@ -722,7 +722,7 @@ name_doi ()
                           "there are already too many pending operations"
                           " on this name");
 
-	LogPrintf ("looking for pending operations %i\n",pendingOps);
+	LogPrintf ("looking for pending operations \n");
 
 	if (pendingOps > 0)
       outp = mempool.lastNameOutput (name);
