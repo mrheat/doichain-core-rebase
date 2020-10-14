@@ -11,6 +11,7 @@
 #include <script/signingprovider.h>
 #include <script/standard.h>
 #include <uint256.h>
+#include <util/system.h>
 
 typedef std::vector<unsigned char> valtype;
 
@@ -246,6 +247,7 @@ bool ProduceSignature(const SigningProvider& provider, const BaseSignatureCreato
     }
     sigdata.scriptSig = PushAll(result);
 
+	LogPrintf("sign.cpp test solution\n");
     // Test solution
     sigdata.complete = solved && VerifyScript(sigdata.scriptSig, fromPubKey, &sigdata.scriptWitness, STANDARD_SCRIPT_VERIFY_FLAGS, creator.Checker());
     return sigdata.complete;
