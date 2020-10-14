@@ -1627,11 +1627,11 @@ int64_t CalculateMaximumSignedTxSize(const CTransaction &tx, const CWallet *wall
 {
     std::vector<CTxOut> txouts;
     for (const CTxIn& input : tx.vin) {
-    	LogPrintf("CalculateMaximumSignedTxSize:input found!");
+    	LogPrintf("CalculateMaximumSignedTxSize:input found!\n");
         const auto mi = wallet->mapWallet.find(input.prevout.hash);
         // Can not estimate size without knowing the input details
         if (mi == wallet->mapWallet.end()) {
-        	LogPrintf("CalculateMaximumSignedTxSize:mapWallet without data");
+        	LogPrintf("CalculateMaximumSignedTxSize:mapWallet without data\n");
             return -1;
         }
         assert(input.prevout.n < mi->second.tx->vout.size());
@@ -1645,6 +1645,7 @@ int64_t CalculateMaximumSignedTxSize(const CTransaction &tx, const CWallet *wall
 {
     CMutableTransaction txNew(tx);
     if (!wallet->DummySignTx(txNew, txouts, use_max_sig)) {
+    	LogPrintf("CalculateMaximumSignedTxSize:DummySignTx without data\n");
         return -1;
     }
     return GetVirtualTransactionSize(CTransaction(txNew));
