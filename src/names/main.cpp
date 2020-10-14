@@ -87,7 +87,7 @@ CheckNameTransaction (const CTransaction& tx, unsigned nHeight,
                       const CCoinsView& view,
                       TxValidationState& state, unsigned flags)
 {
-	LogPrintf ("CheckNameTransaction Step 0\n");
+
   const bool fMempool = (flags & SCRIPT_VERIFY_NAMES_MEMPOOL);
 
   /* Ignore historic bugs.  */
@@ -98,7 +98,7 @@ CheckNameTransaction (const CTransaction& tx, unsigned nHeight,
   /* As a first step, try to locate inputs and outputs of the transaction
      that are name scripts.  At most one input and output should be
      a name operation.  */
-
+  LogPrintf ("CheckNameTransaction: Checking Inputs - 0\n");
   int nameIn = -1;
   CNameScript nameOpIn;
   Coin coinIn;
@@ -123,7 +123,7 @@ CheckNameTransaction (const CTransaction& tx, unsigned nHeight,
           coinIn = coin;
         }
     }
-  LogPrintf ("CheckNameTransaction Step 1\n");
+  LogPrintf ("CheckNameTransaction: Checking Outputs - 1\n");
   int nameOut = -1;
   CNameScript nameOpOut;
   for (unsigned i = 0; i < tx.vout.size (); ++i)
@@ -249,7 +249,17 @@ CheckNameTransaction (const CTransaction& tx, unsigned nHeight,
   LogPrintf ("CheckNameTransaction Step 5\n");
   if (nameOpOut.getNameOp () == OP_NAME_DOI)
     {
-	  LogPrintf ("this is a OP_NAME_DOI returning true!\n");
+	   if (nameIn != -1){
+		   LogPrintf ("this OP_NAME_DOI WITH previous name input !\n");
+		      CNameData oldName;
+		      if (!view.GetName (name, oldName))
+		        return state.Invalid (TxValidationResult::TX_CONSENSUS,
+		                              "tx-nameupdate-nonexistant",
+		                              "NAME_DOI name does not exist");
+	   }else{
+		   LogPrintf ("this OP_NAME_DOI WITHOUT previous name input no check needed here!\n");
+	   }
+
       return true;      
     }
   /* Finally, NAME_FIRSTUPDATE.  */
