@@ -762,7 +762,7 @@ name_doi ()
 	  LogPrintf ("output is not null using old data as input here! \n");
 	     CNameData oldData;
       const auto& coinsTip = ::ChainstateActive ().CoinsTip ();
-      if (!coinsTip.GetName (name, oldData) || oldData.isExpired ())
+      if (coinsTip.GetName (name, oldData)) // || oldData.isExpired ())
         throw JSONRPCError (RPC_TRANSACTION_ERROR,
                             "this name can not be updated");
 	 /* const UniValue txidVal
