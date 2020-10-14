@@ -731,11 +731,12 @@ name_doi ()
 
   if (outp.IsNull ())
     {
-	  LogPrintf ("couldn't find old output in pending operations, looking in old data %i\n");
+	  LogPrintf ("couldn't find old output in pending operations, looking in old data\n");
       LOCK (cs_main);
 
       CNameData oldData;
       const auto& coinsTip = ::ChainstateActive ().CoinsTip ();
+      coinsTip.GetName (name, oldData) ;
      /* if (!coinsTip.GetName (name, oldData) || oldData.isExpired ())
         throw JSONRPCError (RPC_TRANSACTION_ERROR,
                             "this name can not be updated");*/
