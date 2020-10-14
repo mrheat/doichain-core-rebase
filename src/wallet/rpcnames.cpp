@@ -731,7 +731,7 @@ name_doi ()
 
   if (outp.IsNull ())
     {
-	  LogPrintf ("couldn't find old output in pending operations, looking in old data %i\n",pendingOps);
+	  LogPrintf ("couldn't find old output in pending operations, looking in old data %i\n");
       LOCK (cs_main);
 
       CNameData oldData;
