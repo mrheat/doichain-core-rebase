@@ -371,7 +371,7 @@ bool CCoinsViewDB::ValidateNameDB(ChainstateManager& chainman) const
         {
         case DB_COIN:
         {
-    	    LogPrintf("Checkng DB_COIN.\n");
+    	    //LogPrintf("Checkng DB_COIN.\n");
             Coin coin;
             if (!pcursor->GetValue(coin))
                 return error("%s : failed to read coin", __func__);

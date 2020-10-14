@@ -722,19 +722,23 @@ name_doi ()
                           "there are already too many pending operations"
                           " on this name");
 
-    if (pendingOps > 0)
+	LogPrintf ("looking for pending operations %i\n",pendingOps);
+
+	if (pendingOps > 0)
       outp = mempool.lastNameOutput (name);
+
   }
 
   if (outp.IsNull ())
     {
+	  LogPrintf ("couldn't find old output in pending operations, looking in old data %i\n",pendingOps);
       LOCK (cs_main);
 
       CNameData oldData;
       const auto& coinsTip = ::ChainstateActive ().CoinsTip ();
-      /*if (!coinsTip.GetName (name, oldData) || oldData.isExpired ())
+      if (!coinsTip.GetName (name, oldData) || oldData.isExpired ())
         throw JSONRPCError (RPC_TRANSACTION_ERROR,
-                            "this name can not be updated");*/
+                            "this name can not be updated");
 
       outp = oldData.getUpdateOutpoint ();
     } 
