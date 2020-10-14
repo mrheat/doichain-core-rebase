@@ -59,6 +59,7 @@ getNameOutput (const CTxMemPool& pool, const uint256& txid)
 COutPoint
 CNameMemPool::lastNameOutput (const valtype& name) const
 {
+	LogPrintf("CNameMemPool:lastNameOutput\n");
   const auto itUpd = updates.find (name);
   if (itUpd != updates.end ())
     {
@@ -97,6 +98,7 @@ CNameMemPool::lastNameOutput (const valtype& name) const
   const auto itDois = mapNameDois.find (name);
   if (itDois != mapNameDois.end ())
     {
+	  LogPrintf("CNameMemPool:checking mapNameDois\n");
       /* From all the pending updates, we have to find the last one.  This is
          the unique outpoint that is not also spent by some other transaction.
          Thus, we keep track of all the transactions spent as well, and then
@@ -126,6 +128,7 @@ CNameMemPool::lastNameOutput (const valtype& name) const
         }
 
       assert (!res.IsNull ());
+      LogPrintf("CNameMemPool:found old name output\n");
       return res;
     }
 
