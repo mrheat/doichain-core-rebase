@@ -3050,7 +3050,7 @@ bool CWallet::CreateTransactionInternal(
 
                 nBytes = CalculateMaximumSignedTxSize(CTransaction(txNew), this, coin_control.fAllowWatchOnly);
                 if (nBytes < 0) {
-                    error = _("Signing transaction failed");
+                    error = _("Signing transaction failed - max signed tx size to small");
                     return false;
                 }
 
