@@ -94,6 +94,41 @@ CNameMemPool::lastNameOutput (const valtype& name) const
       return res;
     }
 
+  const auto itDois = mapNameDois.find (name);
+  if (itDois != mapNameDois.end ())
+    {
+      /* From all the pending updates, we have to find the last one.  This is
+         the unique outpoint that is not also spent by some other transaction.
+         Thus, we keep track of all the transactions spent as well, and then
+         remove those from the sets of candidates.  Doing so by txid (rather
+         than outpoint) is enough, as those transactions must be in a "chain"
+         anyway.  */
+
+      const std::set<uint256>& candidateTxids = itDois->second;
+      std::set<uint256> spentTxids;
+
+      for (const auto& txid : candidateTxids)
+        {
+          const auto mit = pool.mapTx.find (txid);
+          assert (mit != pool.mapTx.end ());
+          for (const auto& in : mit->GetTx ().vin)
+            spentTxids.insert (in.prevout.hash);
+        }
+
+      COutPoint res;
+      for (const auto& txid : candidateTxids)
+        {
+          if (spentTxids.count (txid) > 0)
+            continue;
+
+          assert (res.IsNull ());
+          res = getNameOutput (pool, txid);
+        }
+
+      assert (!res.IsNull ());
+      return res;
+    }
+
   const auto itReg = mapNameRegs.find (name);
   if (itReg != mapNameRegs.end ())
     return getNameOutput (pool, itReg->second);
