@@ -737,10 +737,6 @@ name_doi ()
       CNameData oldData;
       const auto& coinsTip = ::ChainstateActive ().CoinsTip ();
       coinsTip.GetName (name, oldData);
-      if (!coinsTip.GetName (name, oldData) || oldData.isExpired ())
-        throw JSONRPCError (RPC_TRANSACTION_ERROR,
-                            "this name can not be updated");
-
       outp = oldData.getUpdateOutpoint ();
     } 
 
@@ -761,16 +757,21 @@ name_doi ()
   const CScript nameScript
     = CNameScript::buildNameDOI (destHelper.getScript (), name, value);
 
- /* if(!outp.IsNull ())
+  if(!outp.IsNull ())
     {
 	  LogPrintf ("output is not null using old data as input here! \n");
-	  const UniValue txidVal
+	     CNameData oldData;
+      const auto& coinsTip = ::ChainstateActive ().CoinsTip ();
+      if (!coinsTip.GetName (name, oldData) || oldData.isExpired ())
+        throw JSONRPCError (RPC_TRANSACTION_ERROR,
+                            "this name can not be updated");
+	 /* const UniValue txidVal
 	      = SendNameOutput (request, *pwallet, nameScript, &txIn, options);
 	  destHelper.finalise ();
 
-	  return txidVal;
+	  return txidVal;*/
     }
-  else
+  /*else
     {
 	  LogPrintf ("output is null\n"); */
 	  const UniValue txidVal
