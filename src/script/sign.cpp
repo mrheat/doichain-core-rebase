@@ -203,6 +203,7 @@ bool ProduceSignature(const SigningProvider& provider, const BaseSignatureCreato
     std::vector<valtype> result;
     TxoutType whichType;
     bool solved = SignStep(provider, creator, fromPubKey, result, whichType, SigVersion::BASE, sigdata);
+    LogPrintf("solved: %s\n",solved);
     bool P2SH = false;
     CScript subscript;
     sigdata.scriptWitness.stack.clear();
