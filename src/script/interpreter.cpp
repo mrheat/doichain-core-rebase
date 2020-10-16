@@ -442,9 +442,10 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& 
                 }
                 stack.push_back(vchPushValue);
             } else if (fExec || (OP_IF <= opcode && opcode <= OP_ENDIF))
-            	  LogPrintf("interpreter.cpp : EvalScript 0.6\n");
             switch (opcode)
             {
+            LogPrintf("interpreter.cpp : EvalScript 0.6\n");
+
                 //
                 // Push value
                 //
