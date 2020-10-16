@@ -372,6 +372,7 @@ static bool EvalChecksig(const valtype& vchSig, const valtype& vchPubKey, CScrip
 
 bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& script, unsigned int flags, const BaseSignatureChecker& checker, SigVersion sigversion, ScriptError* serror)
 {
+	 LogPrintf("interpreter.cpp : EvalScript 0\n");
     static const CScriptNum bnZero(0);
     static const CScriptNum bnOne(1);
     // static const CScriptNum bnFalse(0);
@@ -395,6 +396,7 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& 
 
     try
     {
+    	LogPrintf("interpreter.cpp : EvalScript 1\n");
         while (pc < pend)
         {
             bool fExec = vfExec.all_true();
@@ -404,13 +406,14 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& 
             //
             if (!script.GetOp(pc, opcode, vchPushValue))
                 return set_error(serror, SCRIPT_ERR_BAD_OPCODE);
+            LogPrintf("interpreter.cpp : EvalScript 0.1\n");
             if (vchPushValue.size() > MAX_SCRIPT_ELEMENT_SIZE)
                 return set_error(serror, SCRIPT_ERR_PUSH_SIZE);
-
+            LogPrintf("interpreter.cpp : EvalScript 0.2\n");
             // Note how OP_RESERVED does not count towards the opcode limit.
             if (opcode > OP_16 && ++nOpCount > MAX_OPS_PER_SCRIPT)
                 return set_error(serror, SCRIPT_ERR_OP_COUNT);
-
+            LogPrintf("interpreter.cpp : EvalScript 0.3\n");
             if (opcode == OP_CAT ||
                 opcode == OP_SUBSTR ||
                 opcode == OP_LEFT ||
@@ -427,17 +430,18 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& 
                 opcode == OP_LSHIFT ||
                 opcode == OP_RSHIFT)
                 return set_error(serror, SCRIPT_ERR_DISABLED_OPCODE); // Disabled opcodes (CVE-2010-5137).
-
+            LogPrintf("interpreter.cpp : EvalScript 0.4\n");
             // With SCRIPT_VERIFY_CONST_SCRIPTCODE, OP_CODESEPARATOR in non-segwit script is rejected even in an unexecuted branch
             if (opcode == OP_CODESEPARATOR && sigversion == SigVersion::BASE && (flags & SCRIPT_VERIFY_CONST_SCRIPTCODE))
                 return set_error(serror, SCRIPT_ERR_OP_CODESEPARATOR);
-
+            LogPrintf("interpreter.cpp : EvalScript 0.5\n");
             if (fExec && 0 <= opcode && opcode <= OP_PUSHDATA4) {
                 if (fRequireMinimal && !CheckMinimalPush(vchPushValue, opcode)) {
                     return set_error(serror, SCRIPT_ERR_MINIMALDATA);
                 }
                 stack.push_back(vchPushValue);
             } else if (fExec || (OP_IF <= opcode && opcode <= OP_ENDIF))
+            	  LogPrintf("interpreter.cpp : EvalScript 0.6\n");
             switch (opcode)
             {
                 //
@@ -466,6 +470,7 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& 
                     stack.push_back(bn.getvch());
                     // The result of these opcodes should always be the minimal way to push the data
                     // they push, so no need for a CheckMinimalPush here.
+                    LogPrintf("interpreter.cpp : EvalScript 0.7\n");
                 }
                 break;
 
@@ -1586,11 +1591,11 @@ bool VerifyScript(const CScript& scriptSig, const CScript& scriptPubKey, const C
 
     if (flags & SCRIPT_VERIFY_P2SH)
         stackCopy = stack;
-   /* if (!EvalScript(stack, scriptPubKey, flags, checker, SigVersion::BASE, serror)){
+    if (!EvalScript(stack, scriptPubKey, flags, checker, SigVersion::BASE, serror)){
     	   LogPrintf("interpreter.cpp : 02 EvalScript returns false \n");
     	   // serror is set
-		//return false;
-    }*/
+		return false;
+    }
 
     if (stack.empty())
         return set_error(serror, SCRIPT_ERR_EVAL_FALSE);
