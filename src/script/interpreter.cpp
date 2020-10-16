@@ -472,7 +472,6 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& 
                     stack.push_back(bn.getvch());
                     // The result of these opcodes should always be the minimal way to push the data
                     // they push, so no need for a CheckMinimalPush here.
-                    LogPrintf("interpreter.cpp : EvalScript 0.7\n");
                 }
                 break;
 
@@ -1153,6 +1152,7 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& 
             if (stack.size() + altstack.size() > MAX_STACK_SIZE)
                 return set_error(serror, SCRIPT_ERR_STACK_SIZE);
         }
+        LogPrintf("interpreter.cpp : EvalScript 0.7\n");
     }
     catch (...)
     {
