@@ -1562,7 +1562,7 @@ static bool VerifyWitnessProgram(const CScriptWitness& witness, int witversion, 
 
 bool VerifyScript(const CScript& scriptSig, const CScript& scriptPubKey, const CScriptWitness* witness, unsigned int flags, const BaseSignatureChecker& checker, ScriptError* serror)
 {
-	 LogPrintf("interpreter.cpp : 0 VerifyScript started.\n");
+	LogPrintf("interpreter.cpp : 0 VerifyScript started.\n");
     static const CScriptWitness emptyWitness;
     if (witness == nullptr) {
         witness = &emptyWitness;
@@ -1581,15 +1581,15 @@ bool VerifyScript(const CScript& scriptSig, const CScript& scriptPubKey, const C
     if (!EvalScript(stack, scriptSig, flags, checker, SigVersion::BASE, serror)){
         LogPrintf("interpreter.cpp : 01 EvalScript returns false\n");
         // serror is set
-               return false;
+	   return false;
     }
 
     if (flags & SCRIPT_VERIFY_P2SH)
         stackCopy = stack;
     if (!EvalScript(stack, scriptPubKey, flags, checker, SigVersion::BASE, serror)){
-    	   LogPrintf("interpreter.cpp : 02 EvalScript returns false\n");
+    	   LogPrintf("interpreter.cpp : 02 EvalScript returns false \n");
     	   // serror is set
-    	        return false;
+		//return false;
     }
 
     if (stack.empty())
