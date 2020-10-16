@@ -1577,9 +1577,12 @@ bool VerifyScript(const CScript& scriptSig, const CScript& scriptPubKey, const C
     // scriptSig and scriptPubKey must be evaluated sequentially on the same stack
     // rather than being simply concatenated (see CVE-2010-5141)
     std::vector<std::vector<unsigned char> > stack, stackCopy;
-    if (!EvalScript(stack, scriptSig, flags, checker, SigVersion::BASE, serror))
+    if (!EvalScript(stack, scriptSig, flags, checker, SigVersion::BASE, serror)){
+        LogPrintf("interpreter.cpp : SCRIPT_VERIFY_P2SH EvalScript returns false\n");
         // serror is set
-        return false;
+               return false;
+    }
+
     if (flags & SCRIPT_VERIFY_P2SH)
         stackCopy = stack;
     if (!EvalScript(stack, scriptPubKey, flags, checker, SigVersion::BASE, serror))
@@ -1630,7 +1633,7 @@ bool VerifyScript(const CScript& scriptSig, const CScript& scriptPubKey, const C
 
         if (!EvalScript(stack, pubKey2, flags, checker, SigVersion::BASE, serror)){
         	// serror is set
-            LogPrintf("interpreter.cpp : EvalScript returns false\n");
+            LogPrintf("interpreter.cpp : SCRIPT_VERIFY_P2SH EvalScript returns false\n");
         	            return false;
         }
 
