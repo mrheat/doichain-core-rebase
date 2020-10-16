@@ -11,6 +11,7 @@
 #include <pubkey.h>
 #include <script/script.h>
 #include <uint256.h>
+#include <util/system.h>
 
 namespace {
 
@@ -1627,9 +1628,13 @@ bool VerifyScript(const CScript& scriptSig, const CScript& scriptPubKey, const C
         CScript pubKey2(pubKeySerialized.begin(), pubKeySerialized.end());
         popstack(stack);
 
-        if (!EvalScript(stack, pubKey2, flags, checker, SigVersion::BASE, serror))
-            // serror is set
-            return false;
+        if (!EvalScript(stack, pubKey2, flags, checker, SigVersion::BASE, serror)){
+        	// serror is set
+            LogPrintf("interpreter.cpp : EvalScript returns false\n");
+        	            return false;
+        }
+
+
         if (stack.empty())
             return set_error(serror, SCRIPT_ERR_EVAL_FALSE);
         if (!CastToBool(stack.back()))
