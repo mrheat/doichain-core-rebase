@@ -444,8 +444,6 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& 
             } else if (fExec || (OP_IF <= opcode && opcode <= OP_ENDIF))
             switch (opcode)
             {
-            LogPrintf("interpreter.cpp : EvalScript 0.6\n");
-
                 //
                 // Push value
                 //
@@ -467,6 +465,7 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& 
                 case OP_15:
                 case OP_16:
                 {
+                    LogPrintf("interpreter.cpp : EvalScript 0.6\n");
                     // ( -- value)
                     CScriptNum bn((int)opcode - (int)(OP_1 - 1));
                     stack.push_back(bn.getvch());
@@ -606,6 +605,7 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& 
 
                 case OP_VERIFY:
                 {
+                    LogPrintf("interpreter.cpp : EvalScript 0.8 OP_VERIFY\n");
                     // (true -- ) or
                     // (false -- false) and return
                     if (stack.size() < 1)
@@ -620,6 +620,7 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& 
 
                 case OP_RETURN:
                 {
+                	 LogPrintf("interpreter.cpp : EvalScript 0.8 OP_RETURN\n");
                     return set_error(serror, SCRIPT_ERR_OP_RETURN);
                 }
                 break;
@@ -648,6 +649,7 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& 
 
                 case OP_2DROP:
                 {
+                	 LogPrintf("interpreter.cpp : EvalScript 0.8 OP_2DROP\n");
                     // (x1 x2 -- )
                     if (stack.size() < 2)
                         return set_error(serror, SCRIPT_ERR_INVALID_STACK_OPERATION);
@@ -658,6 +660,7 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& 
 
                 case OP_2DUP:
                 {
+                	 LogPrintf("interpreter.cpp : EvalScript 0.8 OP_2DUP\n");
                     // (x1 x2 -- x1 x2 x1 x2)
                     if (stack.size() < 2)
                         return set_error(serror, SCRIPT_ERR_INVALID_STACK_OPERATION);
@@ -738,6 +741,7 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& 
 
                 case OP_DROP:
                 {
+                	 LogPrintf("interpreter.cpp : EvalScript 0.8 OP_DROP\n");
                     // (x -- )
                     if (stack.size() < 1)
                         return set_error(serror, SCRIPT_ERR_INVALID_STACK_OPERATION);
@@ -842,6 +846,7 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& 
                 case OP_EQUALVERIFY:
                 //case OP_NOTEQUAL: // use OP_NUMNOTEQUAL
                 {
+                	 LogPrintf("interpreter.cpp : EvalScript 0.8 OP_EQUAL\n");
                     // (x1 x2 - bool)
                     if (stack.size() < 2)
                         return set_error(serror, SCRIPT_ERR_INVALID_STACK_OPERATION);
