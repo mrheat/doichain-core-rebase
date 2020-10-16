@@ -767,7 +767,7 @@ name_doi ()
     {
 	  LogPrintf ("output is not null using old data as input here \n");
 	  const UniValue txidVal
-	      = SendNameOutput (request, *pwallet, nameScript, &txIn, options);
+	      = SendNameOutput (request, *pwallet, nameScript, nullptr, options); // &txIn
 	  destHelper.finalise ();
 
 	  return txidVal;
