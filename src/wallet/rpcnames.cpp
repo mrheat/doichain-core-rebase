@@ -712,6 +712,7 @@ name_doi ()
   const unsigned chainLimit = gArgs.GetArg ("-limitnamechains",
                                             DEFAULT_NAME_CHAIN_LIMIT);
   COutPoint outp;
+  valtype& vch1;
   {
     auto& mempool = EnsureMemPool (request.context);
     LOCK (mempool.cs);
@@ -737,6 +738,7 @@ name_doi ()
       CNameData oldData;
       const auto& coinsTip = ::ChainstateActive ().CoinsTip ();
       coinsTip.GetName (name, oldData);
+      vch1 = oldData.getValue ();
       //if (!coinsTip.GetName (name, oldData) || oldData.isExpired ())
         /*throw JSONRPCError (RPC_TRANSACTION_ERROR,
                             "this name can not be updated");*/
@@ -763,7 +765,7 @@ name_doi ()
 
   if(!outp.IsNull ())
     {
-	  valtype& vch1 = oldData.getValue ();
+
 	  std::string s(vch1.begin(), vch1.end());
 	  LogPrintf ("output is not null using old data as input here! \n%s \n",s);
 	  const UniValue txidVal
