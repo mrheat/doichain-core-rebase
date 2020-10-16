@@ -437,6 +437,7 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& 
             LogPrintf("interpreter.cpp : EvalScript 0.5\n");
             if (fExec && 0 <= opcode && opcode <= OP_PUSHDATA4) {
                 if (fRequireMinimal && !CheckMinimalPush(vchPushValue, opcode)) {
+                	LogPrintf("interpreter.cpp : EvalScript 0.5\n");
                     return set_error(serror, SCRIPT_ERR_MINIMALDATA);
                 }
                 stack.push_back(vchPushValue);
