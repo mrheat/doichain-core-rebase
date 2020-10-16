@@ -744,7 +744,7 @@ name_doi ()
       outp = oldData.getUpdateOutpoint ();
     } 
 
-  CTxIn txIn (outp);
+  //CTxIn txIn (outp);
   //assert (!outp.IsNull ());
 
   /* Make sure the results are valid at least up to the most recent block
@@ -761,7 +761,7 @@ name_doi ()
   const CScript nameScript
     = CNameScript::buildNameDOI (destHelper.getScript (), name, value);
 
-  if(!outp.IsNull ())
+  /*if(!outp.IsNull ())
     {
 	  LogPrintf ("output is not null using old data as input here! \n");
 	  const UniValue txidVal
@@ -771,14 +771,14 @@ name_doi ()
 	  return txidVal;
     }
   else
-    {
+    {*/
 	  LogPrintf ("output is null\n");
 	  const UniValue txidVal
 	      = SendNameOutput (request, *pwallet, nameScript, nullptr, options);
 	  destHelper.finalise ();
 
 	  return txidVal;
-    }
+   // }
 }
   );
 }
