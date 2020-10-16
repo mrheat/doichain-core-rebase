@@ -256,11 +256,12 @@ CheckNameTransaction (const CTransaction& tx, unsigned nHeight,
 		        return state.Invalid (TxValidationResult::TX_CONSENSUS,
 		                              "tx-nameupdate-nonexistant",
 		                              "NAME_DOI name does not exist");
+
+			   if (nameOpIn.getNameOp () != OP_NAME_DOI)
+			     return state.Invalid (TxValidationResult::TX_CONSENSUS,
+			                           "tx-name-doi-not-name-doi-input",
+			                           "NAME_DOI input is not a OP_NAME_DOI");
 	   }else{
-		   if (nameOpIn.getNameOp () != OP_NAME_DOI)
-		     return state.Invalid (TxValidationResult::TX_CONSENSUS,
-		                           "tx-firstupdate-nonnew-input",
-		                           "NAME_DOI input is not a OP_NAME_DOI");
 		   return true;
 		 /* const unsigned inHeight = coinIn.nHeight;
 		  if (inHeight == MEMPOOL_HEIGHT)
