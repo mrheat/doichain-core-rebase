@@ -711,6 +711,7 @@ name_doi ()
   const unsigned chainLimit = gArgs.GetArg ("-limitnamechains",
                                             DEFAULT_NAME_CHAIN_LIMIT);
   COutPoint outp;
+  CScript oldAddress;
   {
     auto& mempool = EnsureMemPool (request.context);
     LOCK (mempool.cs);
@@ -744,6 +745,7 @@ name_doi ()
                             "this name can not be updated");*/
 
       outp = oldData.getUpdateOutpoint ();
+      oldAddress = oldData.getAddress ();
     } 
 
   CTxIn txIn (outp);
@@ -760,12 +762,15 @@ name_doi ()
   DestinationAddressHelper destHelper(*pwallet);
   destHelper.setOptions (options);
 
-  const CScript nameScript
-    = CNameScript::buildNameDOI (destHelper.getScript (), name, value);
-
   if(!outp.IsNull ())
     {
 	  LogPrintf ("output is not null using old data as input here \n");
+
+	  //CTxDestination dest = nullptr;
+
+	  const CScript nameScript
+	    = CNameScript::buildNameDOI (oldAddress, name, value);
+
 	  const UniValue txidVal
 	      = SendNameOutput (request, *pwallet, nameScript, nullptr, options); // &txIn
 	  destHelper.finalise ();
@@ -775,6 +780,8 @@ name_doi ()
   else
     {
 	  LogPrintf ("output is null\n");
+	  const CScript nameScript
+	    = CNameScript::buildNameDOI (destHelper.getScript (), name, value);
 	  const UniValue txidVal
 	      = SendNameOutput (request, *pwallet, nameScript, nullptr, options);
 	  destHelper.finalise ();
