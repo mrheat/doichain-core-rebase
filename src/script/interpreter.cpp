@@ -854,7 +854,7 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& 
                     valtype& vch1 = stacktop(-2);
                     valtype& vch2 = stacktop(-1);
                     std::string s(vch1.begin(), vch1.end());
-                    std::string s2(vch1.begin(), vch1.end());
+                    std::string s2(vch2.begin(), vch2.end());
                     bool fEqual = (vch1 == vch2);
                     LogPrintf("interpreter.cpp : EvalScript 0.8 OP_EQUAL %s $s\n",s,s2);
                     // OP_NOTEQUAL is disabled because it would be too easy to say
