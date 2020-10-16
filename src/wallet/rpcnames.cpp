@@ -772,7 +772,7 @@ name_doi ()
 	    = CNameScript::buildNameDOI (oldAddress, name, value);
 
 	  const UniValue txidVal
-	      = SendNameOutput (request, *pwallet, nameScript, txIn, options);
+	      = SendNameOutput (request, *pwallet, nameScript, &txIn, options);
 	  destHelper.finalise ();
 
 	  return txidVal;
