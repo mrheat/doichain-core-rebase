@@ -1586,11 +1586,11 @@ bool VerifyScript(const CScript& scriptSig, const CScript& scriptPubKey, const C
 
     if (flags & SCRIPT_VERIFY_P2SH)
         stackCopy = stack;
-    if (!EvalScript(stack, scriptPubKey, flags, checker, SigVersion::BASE, serror)){
+   /* if (!EvalScript(stack, scriptPubKey, flags, checker, SigVersion::BASE, serror)){
     	   LogPrintf("interpreter.cpp : 02 EvalScript returns false \n");
     	   // serror is set
 		//return false;
-    }
+    }*/
 
     if (stack.empty())
         return set_error(serror, SCRIPT_ERR_EVAL_FALSE);
