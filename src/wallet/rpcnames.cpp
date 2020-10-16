@@ -541,8 +541,7 @@ name_firstupdate (const JSONRPCRequest& request)
   destHelper.setOptions (options);
 
   const CScript nameScript
-    = CNameScript::buildNameFirstupdate (destHelper.getScript (), name, value,
-                                         rand);
+    = CNameScript::buildNameFirstupdate (destHelper.getScript (), name, value, rand);
 
   const UniValue txidVal
       = SendNameOutput (request, *pwallet, nameScript, &txIn, options);
@@ -712,7 +711,6 @@ name_doi ()
   const unsigned chainLimit = gArgs.GetArg ("-limitnamechains",
                                             DEFAULT_NAME_CHAIN_LIMIT);
   COutPoint outp;
-  valtype& vch1;
   {
     auto& mempool = EnsureMemPool (request.context);
     LOCK (mempool.cs);
@@ -738,7 +736,9 @@ name_doi ()
       CNameData oldData;
       const auto& coinsTip = ::ChainstateActive ().CoinsTip ();
       coinsTip.GetName (name, oldData);
-      vch1 = oldData.getValue ();
+      //valtype& vch1 = oldData.getValue ();
+     // std::string s(vch1.begin(), vch1.end());
+     // LogPrintf ("old value \n%s \n",oldData.getValue ());
       //if (!coinsTip.GetName (name, oldData) || oldData.isExpired ())
         /*throw JSONRPCError (RPC_TRANSACTION_ERROR,
                             "this name can not be updated");*/
@@ -765,9 +765,7 @@ name_doi ()
 
   if(!outp.IsNull ())
     {
-
-	  std::string s(vch1.begin(), vch1.end());
-	  LogPrintf ("output is not null using old data as input here! \n%s \n",s);
+	  LogPrintf ("output is not null using old data as input here \n");
 	  const UniValue txidVal
 	      = SendNameOutput (request, *pwallet, nameScript, &txIn, options);
 	  destHelper.finalise ();

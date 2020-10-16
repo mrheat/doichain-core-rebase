@@ -257,7 +257,25 @@ CheckNameTransaction (const CTransaction& tx, unsigned nHeight,
 		                              "tx-nameupdate-nonexistant",
 		                              "NAME_DOI name does not exist");
 	   }else{
+
+		  const unsigned inHeight = coinIn.nHeight;
+		  if (inHeight == MEMPOOL_HEIGHT)
+		       return true;
 		   LogPrintf ("this OP_NAME_DOI WITHOUT previous name input no check needed here!\n");
+
+		  CNameData oldName;
+		  if (!view.GetName (name, oldName))
+			return state.Invalid (TxValidationResult::TX_CONSENSUS,
+								  "tx-nameupdate-nonexistant",
+								  "OP_NAME_DOI name does not exist");
+
+	      if (oldName.isExpired (nHeight))
+	        return state.Invalid (TxValidationResult::TX_CONSENSUS,
+	                              "tx-nameupdate-expired",
+	                              "OP_NAME_DOI on an expired name");
+
+		   assert (inHeight == oldName.getHeight ());
+		   assert (tx.vin[nameIn].prevout == oldName.getUpdateOutpoint ());
 	   }
 
       return true;      
