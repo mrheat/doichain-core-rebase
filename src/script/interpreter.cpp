@@ -12,6 +12,7 @@
 #include <script/script.h>
 #include <uint256.h>
 #include <util/system.h>
+#include <names/encoding.h>
 
 namespace {
 
@@ -853,10 +854,12 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& 
                         return set_error(serror, SCRIPT_ERR_INVALID_STACK_OPERATION);
                     valtype& vch1 = stacktop(-2);
                     valtype& vch2 = stacktop(-1);
-                    std::string s(vch1.begin(), vch1.end());
-                    std::string s2(vch2.begin(), vch2.end());
+                   // std::string s(vch1.begin(), vch1.end());
+
+                    //std::string s2(vch2.begin(), vch2.end());
                     bool fEqual = (vch1 == vch2);
-                    LogPrintf("interpreter.cpp : EvalScript 0.8 OP_EQUAL \n%s \n%s\n",s,s2);
+                    LogPrintf("interpreter.cpp : EvalScript 0.8 OP_EQUAL \n%s \n%s\n",
+                    		EncodeNameForMessage(s),EncodeNameForMessage(s2));
                     // OP_NOTEQUAL is disabled because it would be too easy to say
                     // something like n != 1 and have some wiseguy pass in 1 with extra
                     // zero bytes after it (numerically, 0x01 == 0x0001 == 0x000001)
