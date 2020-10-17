@@ -712,6 +712,7 @@ name_doi ()
                                             DEFAULT_NAME_CHAIN_LIMIT);
   COutPoint outp;
   CScript oldAddress;
+  CNameData oldData;
   {
     auto& mempool = EnsureMemPool (request.context);
     LOCK (mempool.cs);
@@ -734,7 +735,7 @@ name_doi ()
 	  LogPrintf ("couldn't find old output in pending operations, looking in old data\n");
       LOCK (cs_main);
 
-      CNameData oldData;
+
       const auto& coinsTip = ::ChainstateActive ().CoinsTip ();
       coinsTip.GetName (name, oldData);
 
@@ -758,9 +759,8 @@ name_doi ()
 
   if(!outp.IsNull ())
     {
-	  LogPrintf ("output is not null using old data as input here \n");
-
-	  //CTxDestination dest = nullptr;
+	  LogPrintf ("output is not null using old data as input here %s\n",
+			  EncodeNameForMessage(oldData.getValue ()));
 
 	  const CScript nameScript
 	    = CNameScript::buildNameDOI (oldAddress, name, value);
@@ -773,12 +773,13 @@ name_doi ()
     }
   else
     {
-	  LogPrintf ("output is null\n");
 
+	  LogPrintf ("output is null using mfry8Sw1mUQLKTuDb1wCsZFNJHKyKCuaXk\n");
 	  const CTxDestination dest = DecodeDestination ("mfry8Sw1mUQLKTuDb1wCsZFNJHKyKCuaXk");
 	        if (!IsValidDestination (dest))
 	          throw JSONRPCError (RPC_INVALID_ADDRESS_OR_KEY,
 	                              "Invalid address: ");
+
 
 	  const CScript nameScript
 	    = CNameScript::buildNameDOI (GetScriptForDestination (dest), name, value);
