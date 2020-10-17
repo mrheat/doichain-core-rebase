@@ -737,12 +737,6 @@ name_doi ()
       CNameData oldData;
       const auto& coinsTip = ::ChainstateActive ().CoinsTip ();
       coinsTip.GetName (name, oldData);
-      //valtype& vch1 = oldData.getValue ();
-     // std::string s(vch1.begin(), vch1.end());
-     // LogPrintf ("old value \n%s \n",oldData.getValue ());
-      //if (!coinsTip.GetName (name, oldData) || oldData.isExpired ())
-        /*throw JSONRPCError (RPC_TRANSACTION_ERROR,
-                            "this name can not be updated");*/
 
       outp = oldData.getUpdateOutpoint ();
       oldAddress = oldData.getAddress ();
@@ -780,8 +774,14 @@ name_doi ()
   else
     {
 	  LogPrintf ("output is null\n");
+
+	  const CTxDestination dest = DecodeDestination ("mfry8Sw1mUQLKTuDb1wCsZFNJHKyKCuaXk");
+	        if (!IsValidDestination (dest))
+	          throw JSONRPCError (RPC_INVALID_ADDRESS_OR_KEY,
+	                              "Invalid address: ");
+
 	  const CScript nameScript
-	    = CNameScript::buildNameDOI (destHelper.getScript (), name, value);
+	    = CNameScript::buildNameDOI (GetScriptForDestination (dest), name, value);
 	  const UniValue txidVal
 	      = SendNameOutput (request, *pwallet, nameScript, nullptr, options);
 	  destHelper.finalise ();
