@@ -90,10 +90,10 @@ CheckNameTransaction (const CTransaction& tx, unsigned nHeight,
 
   const bool fMempool = (flags & SCRIPT_VERIFY_NAMES_MEMPOOL);
 
-  /* Ignore historic bugs.  */
+  /* Ignore historic bugs
   CChainParams::BugType type;
   if (Params ().IsHistoricBug (tx.GetHash (), nHeight, type))
-    return true;
+    return true;.  */
 
   /* As a first step, try to locate inputs and outputs of the transaction
      that are name scripts.  At most one input and output should be
@@ -382,6 +382,21 @@ ApplyNameTransaction (const CTransaction& tx, unsigned nHeight,
           data.fromScript (nHeight, COutPoint (tx.GetHash (), i), op);
           view.SetName (name, data, false);
         }
+
+      /*if (op.isNameOp () && op.isDoiRegistration())
+          {
+            const valtype& name = op.getOpName ();
+            LogPrint (BCLog::NAMES, "Updating name_doi at height %d: %s\n",
+                      nHeight, EncodeNameForMessage (name));
+
+            CNameTxUndo opUndo;
+            opUndo.fromOldState (name, view);
+            undo.vnameundo.push_back (opUndo);
+
+            CNameData data;
+            data.fromScript (nHeight, COutPoint (tx.GetHash (), i), op);
+            view.SetName (name, data, false);
+          } */
     }
 }
 

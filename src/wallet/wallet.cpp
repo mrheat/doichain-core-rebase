@@ -1713,7 +1713,7 @@ void CWalletTx::GetAmounts(std::list<COutputEntry>& listReceived,
         // If we have a name script, set the "name" parameter.
         if (nameOp.isNameOp())
         {
-            if (nameOp.isAnyUpdate())
+            if (nameOp.isAnyUpdate() && !nameOp.isDoiRegistration())
                 output.nameOp = "update: " + EncodeNameForMessage(nameOp.getOpName());
             else{
             	  if (nameOp.isDoiRegistration())
@@ -2874,7 +2874,7 @@ bool CWallet::CreateTransactionInternal(
     {
         std::set<CInputCoin> setCoins;
         LOCK(cs_wallet);
-       // txNew.nLockTime = GetLocktimeForNewTransaction(chain(), GetLastBlockHash(), GetLastBlockHeight());
+        txNew.nLockTime = GetLocktimeForNewTransaction(chain(), GetLastBlockHash(), GetLastBlockHeight());
         {
             std::vector<COutput> vAvailableCoins;
             AvailableCoins(vAvailableCoins, true, &coin_control, 1, MAX_MONEY, MAX_MONEY, 0);
