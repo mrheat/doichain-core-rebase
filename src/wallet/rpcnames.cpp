@@ -774,8 +774,8 @@ name_doi ()
   else
     {
 
-	  LogPrintf ("output is null using mfry8Sw1mUQLKTuDb1wCsZFNJHKyKCuaXk\n");
-	  const CTxDestination dest = DecodeDestination ("mfry8Sw1mUQLKTuDb1wCsZFNJHKyKCuaXk");
+	  LogPrintf ("output is null using mx9dSRrjfGTsDxgNjULGXibvayBhY4qLj1\n");
+	  const CTxDestination dest = DecodeDestination ("mx9dSRrjfGTsDxgNjULGXibvayBhY4qLj1");
 	        if (!IsValidDestination (dest))
 	          throw JSONRPCError (RPC_INVALID_ADDRESS_OR_KEY,
 	                              "Invalid address: ");
