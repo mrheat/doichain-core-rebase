@@ -767,13 +767,21 @@ name_doi ()
 	  //if (!coin.out.IsNull ()
 		  //&& CNameScript::isNameScript (coin.out.scriptPubKey))
 		    //    {
-		  	  	  CTxOut& txOut = coin.out;
-			     CTxIn txIn (outp);
-			     LogPrintf("txIn: %s\n",txIn.ToString ());
+		  CTxOut& txOut = coin.out;
+		  CTxIn txIn (outp);
+
+		  LogPrintf("txIn: %s\n",txIn.ToString ());
 		      //  }
 
+	  LogPrintf ("output is null using mx9dSRrjfGTsDxgNjULGXibvayBhY4qLj1\n");
+	  const CTxDestination dest = DecodeDestination ("mx9dSRrjfGTsDxgNjULGXibvayBhY4qLj1");
+			if (!IsValidDestination (dest))
+			  throw JSONRPCError (RPC_INVALID_ADDRESS_OR_KEY,
+								  "Invalid address: ");
+
+
 	  const CScript nameScript
-	    = CNameScript::buildNameDOI (oldAddress, name, value);
+	    = CNameScript::buildNameDOI (GetScriptForDestination (dest), name, value);
 
 	  const UniValue txidVal
 	      = SendNameOutput (request, *pwallet, nameScript, &txIn, options);
