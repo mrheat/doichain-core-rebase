@@ -840,7 +840,7 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& 
                     valtype& vch1 = stacktop(-2);
                     valtype& vch2 = stacktop(-1);
                     bool fEqual = (vch1 == vch2);
-                    LogPrintf("interpreter.cpp : EvalScript 0.8 OP_EQUAL \n%s \n%s\n",
+                    LogPrintf("interpreter.cpp : EvalScript OP_EQUAL \n%s \n%s\n",
                     		EncodeNameForMessage(vch1),EncodeNameForMessage(vch2));
                     // OP_NOTEQUAL is disabled because it would be too easy to say
                     // something like n != 1 and have some wiseguy pass in 1 with extra
@@ -1146,7 +1146,6 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& 
             if (stack.size() + altstack.size() > MAX_STACK_SIZE)
                 return set_error(serror, SCRIPT_ERR_STACK_SIZE);
         }
-        LogPrintf("interpreter.cpp : EvalScript 0.7\n");
     }
     catch (...)
     {

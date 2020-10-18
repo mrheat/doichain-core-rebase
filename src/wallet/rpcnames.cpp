@@ -769,6 +769,7 @@ name_doi ()
 		    //    {
 		  	  	  CTxOut& txOut = coin.out;
 			     CTxIn txIn (outp);
+			     LogPrintf("txIn: %s\n",txIn.ToString ());
 		      //  }
 
 	  const CScript nameScript
