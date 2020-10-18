@@ -713,6 +713,7 @@ name_doi ()
   COutPoint outp;
   CScript oldAddress;
   CNameData oldData;
+  Coin coin;
   {
     auto& mempool = EnsureMemPool (request.context);
     LOCK (mempool.cs);
@@ -743,7 +744,7 @@ name_doi ()
       oldAddress = oldData.getAddress ();
     } 
 
-  CTxIn txIn (outp);
+ // CTxIn txIn (outp);
   //assert (!outp.IsNull ());
 
   /* Make sure the results are valid at least up to the most recent block
@@ -761,6 +762,14 @@ name_doi ()
     {
 	  LogPrintf ("output is not null using old data as input here %s\n",
 			  EncodeNameForMessage(oldData.getValue ()));
+
+	  ::ChainstateActive ().CoinsTip ().GetCoin (outp, coin);
+	  //if (!coin.out.IsNull ()
+		  //&& CNameScript::isNameScript (coin.out.scriptPubKey))
+		    //    {
+		  	  	  CTxOut& txOut = coin.out;
+			     CTxIn txIn (outp);
+		      //  }
 
 	  const CScript nameScript
 	    = CNameScript::buildNameDOI (oldAddress, name, value);
