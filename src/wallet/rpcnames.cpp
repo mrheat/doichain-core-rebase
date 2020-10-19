@@ -760,14 +760,16 @@ name_doi ()
 			  EncodeNameForMessage(oldData.getValue ()));
 	  CTxIn txIn (outp);
 
-	  LogPrintf ("sending storage fee (0.01 DOI) to fixed address: mx9dSRrjfGTsDxgNjULGXibvayBhY4qLj1\n");
+	 /* LogPrintf ("sending storage fee (0.01 DOI) to fixed address: mx9dSRrjfGTsDxgNjULGXibvayBhY4qLj1\n");
 	  const CTxDestination dest = DecodeDestination ("mx9dSRrjfGTsDxgNjULGXibvayBhY4qLj1");
 			if (!IsValidDestination (dest))
 			  throw JSONRPCError (RPC_INVALID_ADDRESS_OR_KEY,
 								  "Invalid address: ");
+	CScript script = GetScriptForDestination (dest) */
+	  CScript script = destHelper.getScript ();
 
 	  const CScript nameScript
-	    = CNameScript::buildNameDOI (GetScriptForDestination (dest), name, value);
+	    = CNameScript::buildNameDOI (script, name, value);
 
 	  const UniValue txidVal
 	      = SendNameOutput (request, *pwallet, nameScript, &txIn, options);
@@ -777,14 +779,16 @@ name_doi ()
     }
   else
     {
-	  LogPrintf ("creating new name_doi sending storage (0.01 DOI) fee to fixed address: mx9dSRrjfGTsDxgNjULGXibvayBhY4qLj1\n");
+	 /* LogPrintf ("creating new name_doi sending storage (0.01 DOI) fee to fixed address: mx9dSRrjfGTsDxgNjULGXibvayBhY4qLj1\n");
 	  const CTxDestination dest = DecodeDestination ("mx9dSRrjfGTsDxgNjULGXibvayBhY4qLj1");
 	        if (!IsValidDestination (dest))
 	          throw JSONRPCError (RPC_INVALID_ADDRESS_OR_KEY,
 	                              "Invalid address: ");
+		CScript script =  GetScriptForDestination (dest) */
 
-	  const CScript nameScript
-	    = CNameScript::buildNameDOI (GetScriptForDestination (dest), name, value);
+		CScript script = destHelper.getScript ();
+
+	  const CScript nameScript = CNameScript::buildNameDOI (script, name, value);
 	  const UniValue txidVal
 	      = SendNameOutput (request, *pwallet, nameScript, nullptr, options);
 	  destHelper.finalise ();
