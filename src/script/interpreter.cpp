@@ -840,8 +840,6 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& 
                     valtype& vch1 = stacktop(-2);
                     valtype& vch2 = stacktop(-1);
                     bool fEqual = (vch1 == vch2);
-                    LogPrintf("interpreter.cpp : EvalScript OP_EQUAL \n%s \n%s\n",
-                    		EncodeNameForMessage(vch1),EncodeNameForMessage(vch2));
                     // OP_NOTEQUAL is disabled because it would be too easy to say
                     // something like n != 1 and have some wiseguy pass in 1 with extra
                     // zero bytes after it (numerically, 0x01 == 0x0001 == 0x000001)
@@ -1562,7 +1560,6 @@ static bool VerifyWitnessProgram(const CScriptWitness& witness, int witversion, 
 
 bool VerifyScript(const CScript& scriptSig, const CScript& scriptPubKey, const CScriptWitness* witness, unsigned int flags, const BaseSignatureChecker& checker, ScriptError* serror)
 {
-	LogPrintf("interpreter.cpp : 0 VerifyScript started.\n");
     static const CScriptWitness emptyWitness;
     if (witness == nullptr) {
         witness = &emptyWitness;
@@ -1579,7 +1576,6 @@ bool VerifyScript(const CScript& scriptSig, const CScript& scriptPubKey, const C
     // rather than being simply concatenated (see CVE-2010-5141)
     std::vector<std::vector<unsigned char> > stack, stackCopy;
     if (!EvalScript(stack, scriptSig, flags, checker, SigVersion::BASE, serror)){
-        LogPrintf("interpreter.cpp : 01 EvalScript returns false\n");
         // serror is set
 	   return false;
     }
@@ -1587,7 +1583,6 @@ bool VerifyScript(const CScript& scriptSig, const CScript& scriptPubKey, const C
     if (flags & SCRIPT_VERIFY_P2SH)
         stackCopy = stack;
     if (!EvalScript(stack, scriptPubKey, flags, checker, SigVersion::BASE, serror)){
-    	   LogPrintf("interpreter.cpp : 02 EvalScript returns false \n");
     	   // serror is set
 		return false;
     }
@@ -1637,8 +1632,7 @@ bool VerifyScript(const CScript& scriptSig, const CScript& scriptPubKey, const C
 
         if (!EvalScript(stack, pubKey2, flags, checker, SigVersion::BASE, serror)){
         	// serror is set
-            LogPrintf("interpreter.cpp : SCRIPT_VERIFY_P2SH EvalScript returns false\n");
-        	            return false;
+        	return false;
         }
 
 

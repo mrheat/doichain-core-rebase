@@ -713,7 +713,6 @@ name_doi ()
   COutPoint outp;
   CScript oldAddress;
   CNameData oldData;
-  Coin coin;
   {
     auto& mempool = EnsureMemPool (request.context);
     LOCK (mempool.cs);
@@ -736,16 +735,12 @@ name_doi ()
 	  LogPrintf ("couldn't find old output in pending operations, looking in old data\n");
       LOCK (cs_main);
 
-
       const auto& coinsTip = ::ChainstateActive ().CoinsTip ();
       coinsTip.GetName (name, oldData);
 
       outp = oldData.getUpdateOutpoint ();
       oldAddress = oldData.getAddress ();
     } 
-
- // CTxIn txIn (outp);
-  //assert (!outp.IsNull ());
 
   /* Make sure the results are valid at least up to the most recent block
      the user could have gotten from another RPC command prior to now.  */
@@ -760,25 +755,16 @@ name_doi ()
 
   if(!outp.IsNull ())
     {
-	  LogPrintf ("output is not null using old data as input here %s\n",
+	  LogPrintf ("updating a name_doi: %s having old_data: %s\n",
+			  EncodeNameForMessage(name),
 			  EncodeNameForMessage(oldData.getValue ()));
+	  CTxIn txIn (outp);
 
-	  ::ChainstateActive ().CoinsTip ().GetCoin (outp, coin);
-	  //if (!coin.out.IsNull ()
-		  //&& CNameScript::isNameScript (coin.out.scriptPubKey))
-		    //    {
-		  CTxOut& txOut = coin.out;
-		  CTxIn txIn (outp);
-
-		  LogPrintf("txIn: %s\n",txIn.ToString ());
-		      //  }
-
-	  LogPrintf ("output is null using mx9dSRrjfGTsDxgNjULGXibvayBhY4qLj1\n");
+	  LogPrintf ("sending storage fee (0.01 DOI) to fixed address: mx9dSRrjfGTsDxgNjULGXibvayBhY4qLj1\n");
 	  const CTxDestination dest = DecodeDestination ("mx9dSRrjfGTsDxgNjULGXibvayBhY4qLj1");
 			if (!IsValidDestination (dest))
 			  throw JSONRPCError (RPC_INVALID_ADDRESS_OR_KEY,
 								  "Invalid address: ");
-
 
 	  const CScript nameScript
 	    = CNameScript::buildNameDOI (GetScriptForDestination (dest), name, value);
@@ -791,13 +777,11 @@ name_doi ()
     }
   else
     {
-
-	  LogPrintf ("output is null using mx9dSRrjfGTsDxgNjULGXibvayBhY4qLj1\n");
+	  LogPrintf ("creating new name_doi sending storage (0.01 DOI) fee to fixed address: mx9dSRrjfGTsDxgNjULGXibvayBhY4qLj1\n");
 	  const CTxDestination dest = DecodeDestination ("mx9dSRrjfGTsDxgNjULGXibvayBhY4qLj1");
 	        if (!IsValidDestination (dest))
 	          throw JSONRPCError (RPC_INVALID_ADDRESS_OR_KEY,
 	                              "Invalid address: ");
-
 
 	  const CScript nameScript
 	    = CNameScript::buildNameDOI (GetScriptForDestination (dest), name, value);
