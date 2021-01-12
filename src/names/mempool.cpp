@@ -187,8 +187,8 @@ CNameMemPool::addUnchecked (const CTxMemPoolEntry& entry)
 	  if (mit == mapNameDois.end ())
 		  mapNameDois.emplace (name, std::set<uint256> ({txHash}));
 	  else
-		mit->second.insert (txHash);
-      //assert (mapNameDois.count (name) == 0);
+		  mit->second.insert (txHash);
+
     }
 }
 

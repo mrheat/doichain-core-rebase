@@ -154,7 +154,6 @@ CheckNameTransaction (const CTransaction& tx, unsigned nHeight,
         return state.Invalid (TxValidationResult::TX_CONSENSUS,
                               "tx-nonname-with-name-output",
                               "Non-name transaction has name output");
-
       return true;
     }
   LogPrintf ("CheckNameTransaction Step 2\n");
@@ -261,11 +260,24 @@ CheckNameTransaction (const CTransaction& tx, unsigned nHeight,
 			     return state.Invalid (TxValidationResult::TX_CONSENSUS,
 			                           "tx-name-doi-not-name-doi-input",
 			                           "NAME_DOI input is not a OP_NAME_DOI");
-	   }else{
-		   return true;
-		 /* const unsigned inHeight = coinIn.nHeight;
+	   }else{ 
+       //here we create a new name_doi in case it is a not used nameId and MAYBE even if it is a used nameId (need to check!)
+       //in case it is an already used nameId we need to 
+       CNameData oldName;
+       if (view.GetName (name, oldName))
+		        return state.Invalid (TxValidationResult::TX_CONSENSUS,
+		                              "tx-name-doi-name-used",
+		                              "NAME_DOI name is already used - please use correct inputs if its an name_doi update");
+       
+      /*const unsigned inHeight = coinIn.nHeight;
 		  if (inHeight == MEMPOOL_HEIGHT)
-		       return true;
+		       return true;*/
+
+		   assert (inHeight == oldName.getHeight ());
+		   assert (tx.vin[nameIn].prevout == oldName.getUpdateOutpoint ()); 
+
+       return true;
+		 /* 
 		   LogPrintf ("this OP_NAME_DOI WITHOUT previous name input no check needed here!\n");
 
 		  CNameData oldName;
@@ -277,10 +289,7 @@ CheckNameTransaction (const CTransaction& tx, unsigned nHeight,
 	      if (oldName.isExpired (nHeight))
 	        return state.Invalid (TxValidationResult::TX_CONSENSUS,
 	                              "tx-nameupdate-expired",
-	                              "OP_NAME_DOI on an expired name");
-
-		   assert (inHeight == oldName.getHeight ());
-		   assert (tx.vin[nameIn].prevout == oldName.getUpdateOutpoint ()); */
+	                              "OP_NAME_DOI on an expired name");*/
 	   }
 
       return true;      
@@ -340,7 +349,7 @@ ApplyNameTransaction (const CTransaction& tx, unsigned nHeight,
 
   /* Handle historic bugs that should *not* be applied.  Names that are
      outputs should be marked as unspendable in this case.  Otherwise,
-     we get an inconsistency between the UTXO set and the name database.  */
+     we get an inconsistency between the UTXO set and the name database.
   CChainParams::BugType type;
   const uint256 txHash = tx.GetHash ();
   if (Params ().IsHistoricBug (txHash, nHeight, type)
@@ -354,13 +363,13 @@ ApplyNameTransaction (const CTransaction& tx, unsigned nHeight,
               view.SpendCoin (COutPoint (txHash, i));
           }
       return;
-    }
+    }  */
 
   /* This check must be done *after* the historic bug fixing above!  Some
      of the names that must be handled above are actually produced by
-     transactions *not* marked as Doichain tx.  */
+     transactions *not* marked as Doichain tx.  
   if (!tx.IsDoichain ())
-    return;
+    return;*/
 
   /* Changes are encoded in the outputs.  We don't have to do any checks,
      so simply apply all these.  */
@@ -382,21 +391,6 @@ ApplyNameTransaction (const CTransaction& tx, unsigned nHeight,
           data.fromScript (nHeight, COutPoint (tx.GetHash (), i), op);
           view.SetName (name, data, false);
         }
-
-      /*if (op.isNameOp () && op.isDoiRegistration())
-          {
-            const valtype& name = op.getOpName ();
-            LogPrint (BCLog::NAMES, "Updating name_doi at height %d: %s\n",
-                      nHeight, EncodeNameForMessage (name));
-
-            CNameTxUndo opUndo;
-            opUndo.fromOldState (name, view);
-            undo.vnameundo.push_back (opUndo);
-
-            CNameData data;
-            data.fromScript (nHeight, COutPoint (tx.GetHash (), i), op);
-            view.SetName (name, data, false);
-          } */
     }
 }
 

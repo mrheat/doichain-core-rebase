@@ -20,7 +20,7 @@
 - txdb.cpp
 	- ValidateNameDB 
 - names/main.cpp
-	- CheckNameTransaction 
+	- CheckNameTransaction  
 
 
 WORKFLOW
@@ -31,6 +31,6 @@ WORKFLOW
 	
 TODO:
 - mempool.cpp 
-	- removeConflicts - please check if we can resove any possible db conflicts here for doi
+	- removeConflicts - please check if we can resolve any possible db conflicts here for doi
 	
 	

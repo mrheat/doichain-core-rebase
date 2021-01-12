@@ -766,7 +766,14 @@ name_doi ()
 			  throw JSONRPCError (RPC_INVALID_ADDRESS_OR_KEY,
 								  "Invalid address: ");
 	CScript script = GetScriptForDestination (dest) */
-	  CScript script = destHelper.getScript ();
+	  CScript script;
+	  if(options.isNull())
+		  script = destHelper.getScript ();
+	  else{
+
+		  script = GetScriptForDestination (dest)
+	  }
+
 
 	  const CScript nameScript
 	    = CNameScript::buildNameDOI (script, name, value);
