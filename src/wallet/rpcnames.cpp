@@ -769,9 +769,9 @@ name_doi ()
 	  CScript script;
 	  if(options.isNull())
 		  script = destHelper.getScript ();
-	  else{
+	  else{	  //send storage fee to destination too. 
 
-		  script = GetScriptForDestination (dest)
+		  //script = GetScriptForDestination (dest)
 	  }
 
 

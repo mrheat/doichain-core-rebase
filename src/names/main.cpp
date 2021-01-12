@@ -269,6 +269,7 @@ CheckNameTransaction (const CTransaction& tx, unsigned nHeight,
 		                              "tx-name-doi-name-used",
 		                              "NAME_DOI name is already used - please use correct inputs if its an name_doi update");
        
+      const unsigned inHeight = coinIn.nHeight;
       /*const unsigned inHeight = coinIn.nHeight;
 		  if (inHeight == MEMPOOL_HEIGHT)
 		       return true;*/
