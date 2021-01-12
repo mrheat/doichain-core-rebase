@@ -203,14 +203,12 @@ bool ProduceSignature(const SigningProvider& provider, const BaseSignatureCreato
     std::vector<valtype> result;
     TxoutType whichType;
     bool solved = SignStep(provider, creator, fromPubKey, result, whichType, SigVersion::BASE, sigdata);
-    LogPrintf("solved: %s\n",solved);
     bool P2SH = false;
     CScript subscript;
     sigdata.scriptWitness.stack.clear();
 
     if (solved && whichType == TxoutType::SCRIPTHASH)
     {
-        LogPrintf("SCRIPTHASH\n");
 
         // Solver returns the subscript that needs to be evaluated;
         // the final scriptSig is the signatures from that
@@ -223,7 +221,6 @@ bool ProduceSignature(const SigningProvider& provider, const BaseSignatureCreato
 
     if (solved && whichType == TxoutType::WITNESS_V0_KEYHASH)
     {
-        LogPrintf("WITNESS_V0_KEYHASH\n");
         CScript witnessscript;
         witnessscript << OP_DUP << OP_HASH160 << ToByteVector(result[0]) << OP_EQUALVERIFY << OP_CHECKSIG;
         TxoutType subType;
@@ -234,7 +231,6 @@ bool ProduceSignature(const SigningProvider& provider, const BaseSignatureCreato
     }
     else if (solved && whichType == TxoutType::WITNESS_V0_SCRIPTHASH)
     {
-	    LogPrintf("WITNESS_V0_SCRIPTHASH\n");
         CScript witnessscript(result[0].begin(), result[0].end());
         sigdata.witness_script = witnessscript;
         TxoutType subType;
@@ -244,12 +240,10 @@ bool ProduceSignature(const SigningProvider& provider, const BaseSignatureCreato
         sigdata.witness = true;
         result.clear();
     } else if (solved && whichType == TxoutType::WITNESS_UNKNOWN) {
-    	LogPrintf("WITNESS_UNKNOWN\n");
         sigdata.witness = true;
     }
 
     if (P2SH) {
-	   LogPrintf("P2SH\n");
         result.push_back(std::vector<unsigned char>(subscript.begin(), subscript.end()));
     }
     sigdata.scriptSig = PushAll(result);
@@ -257,7 +251,6 @@ bool ProduceSignature(const SigningProvider& provider, const BaseSignatureCreato
 
     // Test solution
     sigdata.complete = solved && VerifyScript(sigdata.scriptSig, fromPubKey, &sigdata.scriptWitness, STANDARD_SCRIPT_VERIFY_FLAGS, creator.Checker());
-    LogPrintf("sign.cpp test solution %s\n",sigdata.complete);
     return sigdata.complete;
 }
 
