@@ -732,7 +732,7 @@ name_doi ()
 
   if (outp.IsNull ())
     {
-	  LogPrintf ("couldn't find old output in pending operations, looking in old data\n");
+	    LogPrintf ("couldn't find old output in pending operations, looking in old data\n");
       LOCK (cs_main);
 
       const auto& coinsTip = ::ChainstateActive ().CoinsTip ();
@@ -766,20 +766,20 @@ name_doi ()
 			  throw JSONRPCError (RPC_INVALID_ADDRESS_OR_KEY,
 								  "Invalid address: ");
 	CScript script = GetScriptForDestination (dest) */
+    
+    /*
 	  CScript script;
 	  if(options.isNull())
-		  script = destHelper.getScript ();
+		    script = destHelper.getScript ();
 	  else{	  //send storage fee to destination too. 
 
 		  //script = GetScriptForDestination (dest)
-	  }
+	  }*/
 
+	  CScript script = destHelper.getScript ();
+	  const CScript nameScript = CNameScript::buildNameDOI (script, name, value);
 
-	  const CScript nameScript
-	    = CNameScript::buildNameDOI (script, name, value);
-
-	  const UniValue txidVal
-	      = SendNameOutput (request, *pwallet, nameScript, &txIn, options);
+	  const UniValue txidVal = SendNameOutput (request, *pwallet, nameScript, &txIn, options);
 	  destHelper.finalise ();
 
 	  return txidVal;
@@ -796,8 +796,7 @@ name_doi ()
 		CScript script = destHelper.getScript ();
 
 	  const CScript nameScript = CNameScript::buildNameDOI (script, name, value);
-	  const UniValue txidVal
-	      = SendNameOutput (request, *pwallet, nameScript, nullptr, options);
+	  const UniValue txidVal = SendNameOutput (request, *pwallet, nameScript, nullptr, options);
 	  destHelper.finalise ();
 
 	  return txidVal;

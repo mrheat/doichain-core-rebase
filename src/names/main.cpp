@@ -263,19 +263,22 @@ CheckNameTransaction (const CTransaction& tx, unsigned nHeight,
 	   }else{ 
        //here we create a new name_doi in case it is a not used nameId and MAYBE even if it is a used nameId (need to check!)
        //in case it is an already used nameId we need to 
+       LogPrintf ("this OP_NAME_DOI WITHOUT previous name input !\n");
        CNameData oldName;
-       if (view.GetName (name, oldName))
-		        return state.Invalid (TxValidationResult::TX_CONSENSUS,
+       if (view.GetName (name, oldName)){
+           LogPrintf ("this OP_NAME_DOI already exists !\n");
+           return state.Invalid (TxValidationResult::TX_CONSENSUS,
 		                              "tx-name-doi-name-used",
 		                              "NAME_DOI name is already used - please use correct inputs if its an name_doi update");
-       
+       }
+		  LogPrintf ("this OP_NAME_DOI does not yet exists planing to add it !\n");
       const unsigned inHeight = coinIn.nHeight;
       /*const unsigned inHeight = coinIn.nHeight;
 		  if (inHeight == MEMPOOL_HEIGHT)
-		       return true;*/
+		       return true;
 
 		   assert (inHeight == oldName.getHeight ());
-		   assert (tx.vin[nameIn].prevout == oldName.getUpdateOutpoint ()); 
+		   assert (tx.vin[nameIn].prevout == oldName.getUpdateOutpoint ()); */
 
        return true;
 		 /* 
