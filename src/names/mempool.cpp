@@ -66,7 +66,6 @@ getNameOutput (const CTxMemPool& pool, const uint256& txid)
 COutPoint
 CNameMemPool::lastNameOutput (const valtype& name) const
 {
-	LogPrintf("CNameMemPool:lastNameOutput\n");
   const auto itUpd = updates.find (name);
   if (itUpd != updates.end ())
     {
@@ -196,7 +195,6 @@ void
 CNameMemPool::remove (const CTxMemPoolEntry& entry)
 {
   AssertLockHeld (pool.cs);
-  LogPrintf("CNameMemPool:remove\n");
   if (entry.isNameRegistration ())
     {
       const auto mit = mapNameRegs.find (entry.getName ());
@@ -218,7 +216,6 @@ CNameMemPool::remove (const CTxMemPoolEntry& entry)
 
   if (entry.isNameDoi ())
     {
-	  LogPrintf("CNameMemPool:remove - entry.isNameDoi ()\n");
       const auto itName = mapNameDois.find (entry.getName ());
       assert (itName != mapNameDois.end ());
       auto& txids = itName->second;
@@ -449,8 +446,8 @@ CNameMemPool::checkTx (const CTransaction& tx) const
             	return false;
 
 
-			break;
-		}
+			      break;
+		      }
 
         default:
           assert (false);
