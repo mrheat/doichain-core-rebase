@@ -3,6 +3,8 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include <names/main.h>
+#include <script/standard.h>
+#include <key_io.h>
 
 #include <chainparams.h>
 #include <coins.h>
@@ -10,6 +12,8 @@
 #include <dbwrapper.h>
 #include <hash.h>
 #include <names/encoding.h>
+#include <names/common.h>
+#include <names/main.h>
 #include <script/interpreter.h>
 #include <script/names.h>
 #include <txmempool.h>
@@ -265,14 +269,33 @@ CheckNameTransaction (const CTransaction& tx, unsigned nHeight,
        //in case it is an already used nameId we need to 
        LogPrintf ("this OP_NAME_DOI WITHOUT previous name input !\n");
        CNameData oldName;
-       if (view.GetName (name, oldName)){
-           LogPrintf ("this OP_NAME_DOI already exists !\n");
-           return state.Invalid (TxValidationResult::TX_CONSENSUS,
-		                              "tx-name-doi-name-used",
-		                              "NAME_DOI name is already used - please use correct inputs if its an name_doi update");
+       CTxDestination destOld;
+       std::string addrStrOld;
+       CTxDestination destNew;
+       std::string addrStrNew;
+       const unsigned inHeight = coinIn.nHeight;
+       if (view.GetName(name, oldName)) {
+
+  	       if (ExtractDestination (oldName.getAddress(), destOld)){
+    			addrStrOld = EncodeDestination (destOld);
+               		LogPrintf ("oldName: %s\n",  addrStrOld);
+	       }
+
+  	       if (ExtractDestination (nameOpOut.getAddress(), destNew)){
+    			addrStrNew = EncodeDestination (destNew);
+               		LogPrintf ("newName: %s\n",  addrStrNew);
+	       }
+
+              //if(strcmp(addrStrNew,addrStrOld)){
+              //if(addrStrNew!=addrStrOld){ //problem is here that most name_dois have a new destination after overwrite
+              if(inHeight>170000){ //blockheight were we do not except name_doi overwriting anymore
+                LogPrintf("this OP_NAME_DOI already exists and cannot be overwritten!\n");
+                return state.Invalid(TxValidationResult::TX_CONSENSUS,
+                                   "tx-name-doi-name-used",
+                                   "NAME_DOI name is already used - please use correct inputs if its an name_doi update");
+              }
        }
-		  LogPrintf ("this OP_NAME_DOI does not yet exists planing to add it !\n");
-      const unsigned inHeight = coinIn.nHeight;
+      LogPrintf ("this OP_NAME_DOI does not yet exists planing to add it !\n");
       /*const unsigned inHeight = coinIn.nHeight;
 		  if (inHeight == MEMPOOL_HEIGHT)
 		       return true;
