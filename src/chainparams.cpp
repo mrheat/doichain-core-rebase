@@ -17,21 +17,6 @@
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
 
-bool CChainParams::IsHistoricBug(const uint256& txid, unsigned nHeight, BugType& type) const
-{
-    const std::pair<unsigned, uint256> key(nHeight, txid);
-    std::map<std::pair<unsigned, uint256>, BugType>::const_iterator mi;
-
-    mi = mapHistoricBugs.find (key);
-    if (mi != mapHistoricBugs.end ())
-    {
-        type = mi->second;
-        return true;
-    }
-
-    return false;
-}
-
 static CBlock CreateGenesisBlock(const CScript& genesisInputScript, const CScript& genesisOutputScript, uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {
     CMutableTransaction txNew;
@@ -187,8 +172,8 @@ public:
                          */
         consensus.hashGenesisBlock = genesis.GetHash();
 
-        printf("Block: %s\n", genesis.GetHash().GetHex().c_str());
-        printf("hashMerkleRoot: %s\n", genesis.hashMerkleRoot.GetHex().c_str());
+        //printf("Block: %s\n", genesis.GetHash().GetHex().c_str());
+        //printf("hashMerkleRoot: %s\n", genesis.hashMerkleRoot.GetHex().c_str());
         assert(consensus.hashGenesisBlock == uint256S("000006fdd8b4d786fd9bdde5bae9486c464e3aa4336c5f8415dfdd3fc1679134"));
         assert(genesis.hashMerkleRoot == uint256S("234651063df5f8b01ecc2fc3a134fa1cb9dc9da9cce0149049483ba1b1469dfb "));	        assert(genesis.hashMerkleRoot == uint256S("234651063df5f8b01ecc2fc3a134fa1cb9dc9da9cce0149049483ba1b1469dfb"));
 
@@ -204,8 +189,10 @@ Block: 00006b0bc91e80054369e07b330c243bf32f4b97f66da976756265b81a9b5828	Block: 0
 hashMerkleRoot: 2e32519b6d57327bfc9c7244068dc5405e6302c0a597324404427a3389ed5b9f	hashMerkleRoot: 234651063df5f8b01ecc2fc3a134fa1cb9dc9da9cce0149049483ba1b1469dfb
 */	
 
-        vSeeds.clear();
-
+        //vSeeds.emplace_back("seeder.doichain.org");
+        vSeeds.emplace_back("dnsseed.doichain.org");
+        vSeeds.emplace_back("seed.doi.works");
+      
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,52);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,13);
         base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,180);
