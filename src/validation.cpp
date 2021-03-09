@@ -1838,10 +1838,6 @@ DisconnectResult CChainState::DisconnectBlock(const CBlock& block, const CBlockI
                     /* This may be due to a historic bug.  For them, some names
                        are marked immediately as unspendable.  They fail this check
                        when undoing, thus ignore them here.  */
-                    CChainParams::BugType type;
-                    if (!Params ().IsHistoricBug (tx.GetHash (), pindex->nHeight, type) || type != CChainParams::BUG_FULLY_IGNORE) {
-                        fClean = false; // transaction output mismatch
-                    }
                 }
             }
         }
