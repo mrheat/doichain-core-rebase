@@ -80,9 +80,9 @@ public:
         consensus.BIP65Height = 130000;
         consensus.BIP66Height = 130000;
         /* Doichain activates CSV/Segwit with BIP16.  */
-        consensus.CSVHeight = 475000;
-        consensus.SegwitHeight = 475000;
-        consensus.MinBIP9WarningHeight = 477016; // segwit activation height + miner confirmation window
+        consensus.CSVHeight = 216500;
+        consensus.SegwitHeight = 216500;
+        consensus.MinBIP9WarningHeight = 218500; // segwit activation height + miner confirmation window
         consensus.powLimit = uint256S("0000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 10 * 60;
