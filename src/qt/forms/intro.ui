@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>674</width>
-    <height>447</height>
+    <width>319</width>
+    <height>399</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -234,11 +234,11 @@
     <layout class="QHBoxLayout" name="pruneOptLayout">
      <item>
       <widget class="QCheckBox" name="prune">
-       <property name="text">
-        <string>Limit block chain storage to</string>
-       </property>
        <property name="toolTip">
         <string>Reverting this setting requires re-downloading the entire blockchain. It is faster to download the full chain first and prune it later. Disables some advanced features.</string>
+       </property>
+       <property name="text">
+        <string>Limit block chain storage to</string>
        </property>
       </widget>
      </item>

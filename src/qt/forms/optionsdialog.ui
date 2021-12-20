@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>560</width>
-    <height>440</height>
+    <width>625</width>
+    <height>454</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="tabMain">
       <attribute name="title">
@@ -794,14 +794,14 @@
               <item>
                <widget class="QLabel" name="embeddedFont_label_1">
                 <property name="text">
-                 <string notr="true">111.11111111 BTC</string>
+                 <string notr="true">111.11111111 DOI</string>
                 </property>
                </widget>
               </item>
               <item>
                <widget class="QLabel" name="embeddedFont_label_9">
                 <property name="text">
-                 <string notr="true">909.09090909 BTC</string>
+                 <string notr="true">909.09090909 DOI</string>
                 </property>
                </widget>
               </item>
@@ -843,14 +843,14 @@
               <item>
                <widget class="QLabel" name="systemFont_label_1">
                 <property name="text">
-                 <string notr="true">111.11111111 BTC</string>
+                 <string notr="true">111.11111111 DOI</string>
                 </property>
                </widget>
               </item>
               <item>
                <widget class="QLabel" name="systemFont_label_9">
                 <property name="text">
-                 <string notr="true">909.09090909 BTC</string>
+                 <string notr="true">909.09090909 DOI</string>
                 </property>
                </widget>
               </item>

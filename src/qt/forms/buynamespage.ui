@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>776</width>
-    <height>364</height>
+    <width>188</width>
+    <height>161</height>
    </rect>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
@@ -95,7 +95,7 @@
          <string>Register the name.  You must have already pre-registered it.</string>
         </property>
         <property name="text">
-         <string>&amp;Register Name&#8230;</string>
+         <string>&amp;Register Name…</string>
         </property>
         <property name="icon">
          <iconset resource="../bitcoin.qrc">
